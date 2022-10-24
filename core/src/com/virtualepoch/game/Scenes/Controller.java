@@ -28,6 +28,24 @@ public class Controller {
         Table table = new Table();
         table.left().bottom();
 
+        Image upImg = new Image(new Texture("flatDark25.png"));
+        upImg.setSize(50, 50);
+        upImg.addListener(new InputListener(){
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchDown(event, x, y, pointer, button);
+                upPressed = true;
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                upPressed = false;
+            }
+        });
+
         Image leftImg = new Image(new Texture("flatDark23.png"));
         leftImg.setSize(50, 50);
         leftImg.addListener(new InputListener(){
@@ -64,6 +82,12 @@ public class Controller {
             }
         });
 
+        Image testImg = new Image(new Texture("flatDark25.png"));
+        testImg.setSize(50, 50);
+
+        table.row().padBottom(controllerPadding);
+        table.add().size(50,50);
+        table.add(testImg).size(testImg.getWidth(), testImg.getHeight());
         table.row().padBottom(controllerPadding);
         table.add(leftImg).size(leftImg.getWidth(), leftImg.getHeight());
         table.add().size(30,50);
@@ -73,24 +97,6 @@ public class Controller {
 
         Table table2 = new Table();
         table2.left().bottom();
-
-        Image upImg = new Image(new Texture("flatDark25.png"));
-        upImg.setSize(50, 50);
-        upImg.addListener(new InputListener(){
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchDown(event, x, y, pointer, button);
-                upPressed = true;
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
-                upPressed = false;
-            }
-        });
 
         table2.row().padBottom(controllerPadding);
         table2.row().pad(0,530,20,0);
