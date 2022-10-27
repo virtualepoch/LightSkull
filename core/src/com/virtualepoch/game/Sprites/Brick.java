@@ -16,12 +16,14 @@ public class Brick extends InteractiveTileObject {
     }
 
     @Override
-    public void onHeadHit() {
-        Gdx.app.log("Brick", "Collision");
-        setCategoryFilter(LightSkull.DESTROYED_BIT);
-        getCell().setTile(null);
-        Hud.addScore(200);
-        LightSkull.manager.get("audio/sounds/breakblock.wav", Sound.class).play();
-
+    public void onHeadHit(Player player) {
+        if(player.isBig()) {
+            Gdx.app.log("Brick", "Collision");
+            setCategoryFilter(LightSkull.DESTROYED_BIT);
+            getCell().setTile(null);
+            Hud.addScore(200);
+            LightSkull.manager.get("audio/sounds/breakblock.wav", Sound.class).play();
+        }
+        LightSkull.manager.get("audio/sounds/bump.wav", Sound.class).play();
     }
 }

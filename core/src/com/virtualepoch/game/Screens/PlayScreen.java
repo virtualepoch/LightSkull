@@ -36,6 +36,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class PlayScreen implements Screen {
     private LightSkull game;
     private TextureAtlas atlas;
+    private TextureAtlas atlas2;
 
     //basic playscreen variables
     private OrthographicCamera gamecam;
@@ -62,6 +63,7 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(LightSkull game) {
         atlas = new TextureAtlas(("Mario_and_Enemies.pack"));
+        atlas2 = new TextureAtlas(("player_and_enemies.atlas"));
         this.game = game;
         gamecam = new OrthographicCamera();
 
@@ -74,7 +76,7 @@ public class PlayScreen implements Screen {
 
         //Load our map and setup our map renderer
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("level1.tmx");
+        map = mapLoader.load("level1a.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / LightSkull.PPM);
 
         //Initially set our gamecam to be centered correctly at the start of the
@@ -94,9 +96,9 @@ public class PlayScreen implements Screen {
 
         world.setContactListener(new WorldContactListener());
 
-        music = LightSkull.manager.get("audio/music/mario_music.ogg", Music.class);
+        music = LightSkull.manager.get("audio/music/fluffing.mp3", Music.class);
         music.setLooping(true);
-        music.setVolume(0.02f);
+        music.setVolume(0.05f);
         music.play();
 
         items = new Array<Item>();
@@ -118,6 +120,9 @@ public class PlayScreen implements Screen {
 
     public TextureAtlas getAtlas(){
         return atlas;
+    }
+    public TextureAtlas getAtlas2(){
+        return atlas2;
     }
 
     @Override

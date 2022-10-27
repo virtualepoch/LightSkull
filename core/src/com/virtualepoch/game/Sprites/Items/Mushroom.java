@@ -12,7 +12,7 @@ public class Mushroom extends Item {
     public Mushroom(PlayScreen screen, float x, float y) {
         super(screen, x, y);
         setRegion(screen.getAtlas().findRegion("mushroom"), 0, 0,16,16);
-        velocity = new Vector2(0.7f,0);
+        velocity = new Vector2(0.7f,-0.5f);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class Mushroom extends Item {
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / LightSkull.PPM);
         fdef.filter.categoryBits = LightSkull.ITEM_BIT;
-        fdef.filter.maskBits = LightSkull.LUCKY_BIT | LightSkull.OBJECT_BIT | LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT;
+        fdef.filter.maskBits = LightSkull.LIGHTSKULL_BIT | LightSkull.OBJECT_BIT | LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT;
 
         fdef.shape = shape;
         body.createFixture(fdef).setUserData(this);
@@ -35,6 +35,7 @@ public class Mushroom extends Item {
     @Override
     public void use(Player player) {
         destroy();
+        player.grow();
     }
 
     @Override

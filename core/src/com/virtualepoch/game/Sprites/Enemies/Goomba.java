@@ -59,7 +59,7 @@ public class Goomba extends Enemy {
         CircleShape shape = new CircleShape();
         shape.setRadius(7 / LightSkull.PPM);
         fdef.filter.categoryBits = LightSkull.ENEMY_BIT;
-        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.LUCKY_BIT;
+        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.LIGHTSKULL_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);

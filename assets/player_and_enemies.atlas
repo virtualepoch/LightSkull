@@ -1,0 +1,34 @@
+
+player_and_enemies.png
+size: 2048, 64
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+crawling-monster-50
+  rotate: false
+  xy: 2, 2
+  size: 1620, 50
+  orig: 1620, 50
+  offset: 0, 0
+  index: -1
+ls_walkdown
+  rotate: false
+  xy: 1754, 4
+  size: 128, 48
+  orig: 128, 48
+  offset: 0, 0
+  index: -1
+ls_walkright
+  rotate: false
+  xy: 1624, 4
+  size: 128, 48
+  orig: 128, 48
+  offset: 0, 0
+  index: -1
+ls_walkup
+  rotate: false
+  xy: 1884, 4
+  size: 128, 48
+  orig: 128, 48
+  offset: 0, 0
+  index: -1

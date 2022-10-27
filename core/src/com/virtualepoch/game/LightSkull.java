@@ -15,7 +15,7 @@ public class LightSkull extends Game {
 	public static final float PPM = 100;
 
 	public static final short GROUND_BIT = 1;
-	public static final short LUCKY_BIT = 2;
+	public static final short LIGHTSKULL_BIT = 2;
 	public static final short BRICK_BIT = 4;
 	public static final short COIN_BIT = 8;
 	public static final short DESTROYED_BIT = 16;
@@ -23,6 +23,7 @@ public class LightSkull extends Game {
 	public static final short ENEMY_BIT = 64;
 	public static final short ENEMY_HEAD_BIT = 128;
 	public static final short ITEM_BIT = 256;
+	public static final short LIGHTSKULL_HEAD_BIT = 512;
 
 	public static SpriteBatch batch;
 
@@ -35,6 +36,7 @@ public class LightSkull extends Game {
 		batch = new SpriteBatch();
 		manager = new AssetManager();
 		manager.load("audio/music/mario_music.ogg", Music.class);
+		manager.load("audio/music/fluffing.mp3", Music.class);
 		manager.load("audio/sounds/coin.wav", Sound.class);
 		manager.load("audio/sounds/bump.wav", Sound.class);
 		manager.load("audio/sounds/breakblock.wav", Sound.class);
