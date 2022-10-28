@@ -21,16 +21,15 @@ public class WorldContactListener implements ContactListener {
         int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
         switch (cDef) {
-            case LightSkull.LIGHTSKULL_HEAD_BIT | LightSkull.BRICK_BIT:
-
-            case LightSkull.LIGHTSKULL_HEAD_BIT | LightSkull.COIN_BIT:
-                if(fixA.getFilterData().categoryBits == LightSkull.LIGHTSKULL_HEAD_BIT)
+            case LightSkull.PLAYER_HEAD_BIT | LightSkull.BRICK_BIT:
+            case LightSkull.PLAYER_HEAD_BIT | LightSkull.COIN_BIT:
+                if(fixA.getFilterData().categoryBits == LightSkull.PLAYER_HEAD_BIT)
                     ((InteractiveTileObject)fixB.getUserData()).onHeadHit((Player) fixA.getUserData());
                 else
                     ((InteractiveTileObject)fixA.getUserData()).onHeadHit((Player) fixB.getUserData());
                 break;
 
-            case LightSkull.ENEMY_HEAD_BIT | LightSkull.LIGHTSKULL_BIT:
+            case LightSkull.ENEMY_HEAD_BIT | LightSkull.PLAYER_BIT:
                 if(fixA.getFilterData().categoryBits == LightSkull.ENEMY_HEAD_BIT)
                     ((Enemy)fixA.getUserData()).hitOnHead();
                 else
@@ -44,8 +43,11 @@ public class WorldContactListener implements ContactListener {
                     ((Enemy)fixB.getUserData()).reverseVelocity(true, false);
                 break;
 
-            case LightSkull.LIGHTSKULL_BIT | LightSkull.ENEMY_BIT:
-                Gdx.app.log("Player", "Died");
+            case LightSkull.PLAYER_BIT | LightSkull.ENEMY_BIT:
+                if(fixA.getFilterData().categoryBits == LightSkull.PLAYER_BIT)
+                    ((Player) fixA.getUserData()).hit();
+                else
+                    ((Player) fixB.getUserData()).hit();
                 break;
 
             case LightSkull.ENEMY_BIT | LightSkull.ENEMY_BIT:
@@ -60,7 +62,7 @@ public class WorldContactListener implements ContactListener {
                     ((Item)fixB.getUserData()).reverseVelocity(true, false);
                 break;
 
-            case LightSkull.ITEM_BIT | LightSkull.LIGHTSKULL_BIT:
+            case LightSkull.ITEM_BIT | LightSkull.PLAYER_BIT:
                 if(fixA.getFilterData().categoryBits == LightSkull.ITEM_BIT)
                     ((Item)fixA.getUserData()).use((Player) fixB.getUserData());
                 else if(!(fixA.getUserData()instanceof String))

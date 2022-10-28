@@ -26,7 +26,7 @@ public class Mushroom extends Item {
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / LightSkull.PPM);
         fdef.filter.categoryBits = LightSkull.ITEM_BIT;
-        fdef.filter.maskBits = LightSkull.LIGHTSKULL_BIT | LightSkull.OBJECT_BIT | LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT;
+        fdef.filter.maskBits = LightSkull.PLAYER_BIT | LightSkull.OBJECT_BIT | LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT;
 
         fdef.shape = shape;
         body.createFixture(fdef).setUserData(this);

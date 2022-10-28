@@ -15,7 +15,7 @@ public class LightSkull extends Game {
 	public static final float PPM = 100;
 
 	public static final short GROUND_BIT = 1;
-	public static final short LIGHTSKULL_BIT = 2;
+	public static final short PLAYER_BIT = 2;
 	public static final short BRICK_BIT = 4;
 	public static final short COIN_BIT = 8;
 	public static final short DESTROYED_BIT = 16;
@@ -23,7 +23,7 @@ public class LightSkull extends Game {
 	public static final short ENEMY_BIT = 64;
 	public static final short ENEMY_HEAD_BIT = 128;
 	public static final short ITEM_BIT = 256;
-	public static final short LIGHTSKULL_HEAD_BIT = 512;
+	public static final short PLAYER_HEAD_BIT = 512;
 
 	public static SpriteBatch batch;
 
