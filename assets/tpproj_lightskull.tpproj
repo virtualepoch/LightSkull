@@ -32,7 +32,7 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../../LightSkullSprites/ls_walkdown.png,type:Input,regionName:null},{path:../../LightSkullSprites/crawling-monster-50.png,type:Input,regionName:null},{path:../../LightSkullSprites/ls_walkdown_gold.png,type:Input,regionName:null},{path:../../LightSkullSprites/ls_walkright.png,type:Input,regionName:null},{path:../../LightSkullSprites/ls_walkright_gold.png,type:Input,regionName:null},{path:../../LightSkullSprites/ls_walkup.png,type:Input,regionName:null},{path:../../LightSkullSprites/ls_walkup_gold.png,type:Input,regionName:null}]
+inputFiles=[{path:../../LightSkullSprites/ls_walkdown.png,type:Input,regionName:null},{path:../../LightSkullSprites/crawling-monster-50.png,type:Input,regionName:null},{path:../../LightSkullSprites/ls_walkdown_gold.png,type:Input,regionName:null},{path:../../LightSkullSprites/ls_walkright.png,type:Input,regionName:null},{path:../../LightSkullSprites/ls_walkright_gold.png,type:Input,regionName:null},{path:../../LightSkullSprites/ls_walkup.png,type:Input,regionName:null},{path:../../LightSkullSprites/ls_walkup_gold.png,type:Input,regionName:null},{path:../../LightSkullSprites/skeleton-fly-spritesheet-100.png,type:Input,regionName:null}]
 keepInputFileExtensions=false
 
 

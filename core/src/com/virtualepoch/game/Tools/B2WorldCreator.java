@@ -14,14 +14,13 @@ import com.virtualepoch.game.LightSkull;
 import com.virtualepoch.game.Screens.PlayScreen;
 import com.virtualepoch.game.Sprites.Brick;
 import com.virtualepoch.game.Sprites.Coin;
+import com.virtualepoch.game.Sprites.Enemies.Enemy;
 import com.virtualepoch.game.Sprites.Enemies.Goomba;
+import com.virtualepoch.game.Sprites.Enemies.Turtle;
 
 public class B2WorldCreator {
     private Array<Goomba> goombas;
-
-    public Array<Goomba> getGoombas() {
-        return goombas;
-    }
+    private Array<Turtle> turtles;
 
     public B2WorldCreator(PlayScreen screen){
         World world = screen.getWorld();
@@ -74,6 +73,19 @@ public class B2WorldCreator {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
                 goombas.add(new Goomba(screen,rect.getX()/ LightSkull.PPM, rect.getY() / LightSkull.PPM));
         }
+        turtles = new Array<Turtle>();
+        for(MapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            turtles.add(new Turtle(screen,rect.getX()/ LightSkull.PPM, rect.getY() / LightSkull.PPM));
+        }
     }
+
+    public Array<Enemy> getEnemies() {
+        Array<Enemy> enemies = new Array<Enemy>();
+        enemies.addAll(goombas);
+        enemies.addAll(turtles);
+        return enemies;
+    }
+
 }
 

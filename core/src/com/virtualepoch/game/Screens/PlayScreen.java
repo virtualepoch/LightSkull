@@ -63,7 +63,7 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(LightSkull game) {
         atlas = new TextureAtlas(("Mario_and_Enemies.pack"));
-        atlas2 = new TextureAtlas(("player_and_enemies.atlas"));
+        atlas2 = new TextureAtlas(("lightskull.atlas"));
         this.game = game;
         gamecam = new OrthographicCamera();
 
@@ -134,6 +134,7 @@ public class PlayScreen implements Screen {
 //        if(Gdx.input.isTouched())
 //            gamecam.position.x += 100 * dt;
 
+        if(player.currentState != Player.State.DEAD)
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP) || controller.isUpPressed())
             player.b2body.applyLinearImpulse(new Vector2(0, 1f),player.b2body.getWorldCenter(), true);
         if(Gdx.input.isKeyPressed(Input.Keys.S) || controller.isRightPressed() && player.b2body.getLinearVelocity().x <= 2)
@@ -147,10 +148,10 @@ public class PlayScreen implements Screen {
         handleInput(dt);
         handleSpawingItems();
 
-        world.step(1/60f, 6, 4);
+        world.step(1/60f, 6, 2);
 
         player.update(dt);
-        for(Enemy enemy : creator.getGoombas()) {
+        for(Enemy enemy : creator.getEnemies()) {
             enemy.update(dt);
             if(enemy.getX() < player.getX() + 230 / PPM) //adjust this to change when enemies are activated
                 enemy.b2body.setActive(true);
@@ -161,8 +162,9 @@ public class PlayScreen implements Screen {
 
         hud.update(dt);
 
-        gamecam.position.x = player.b2body.getPosition().x;
-
+        if(player.currentState != Player.State.DEAD) {
+            gamecam.position.x = player.b2body.getPosition().x;
+        }
         //update our gamecam with correct coordinates after changes
         gamecam.update();
         //tell our renderer to draw only what our camera can see in our game
@@ -187,7 +189,7 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         player.draw(game.batch);
-        for(Enemy enemy : creator.getGoombas())
+        for(Enemy enemy : creator.getEnemies())
             enemy.draw(game.batch);
         for(Item item : items)
             item.draw(game.batch);
@@ -197,6 +199,17 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
         controller.stage.draw();
+
+        if(gameOver()){
+            game.setScreen(new GameOverScreen(game));
+        }
+    }
+
+    public boolean gameOver(){
+        if(player.currentState == Player.State.DEAD && player.getStateTimer() > 3){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -230,7 +243,6 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-
         map.dispose();
         renderer.dispose();
         world.dispose();

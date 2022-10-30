@@ -1,55 +1,62 @@
 
-player_and_enemies.png
-size: 2048, 128
+lightskull.png
+size: 2048, 256
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 crawling-monster-50
   rotate: false
-  xy: 2, 52
-  size: 1620, 50
-  orig: 1620, 50
+  xy: 2, 204
+  size: 1617, 50
+  orig: 1617, 50
   offset: 0, 0
   index: -1
 ls_walkdown
   rotate: false
-  xy: 1754, 54
+  xy: 1116, 154
   size: 128, 48
   orig: 128, 48
   offset: 0, 0
   index: -1
 ls_walkdown_gold
   rotate: false
-  xy: 1884, 54
+  xy: 132, 52
   size: 128, 48
   orig: 128, 48
   offset: 0, 0
   index: -1
 ls_walkright
   rotate: false
-  xy: 2, 2
+  xy: 1621, 206
   size: 128, 48
   orig: 128, 48
   offset: 0, 0
   index: -1
 ls_walkright_gold
   rotate: false
-  xy: 1624, 54
+  xy: 2, 52
   size: 128, 48
   orig: 128, 48
   offset: 0, 0
   index: -1
 ls_walkup
   rotate: false
-  xy: 262, 2
+  xy: 1751, 206
   size: 128, 48
   orig: 128, 48
   offset: 0, 0
   index: -1
 ls_walkup_gold
   rotate: false
-  xy: 132, 2
+  xy: 2, 2
   size: 128, 48
   orig: 128, 48
+  offset: 0, 0
+  index: -1
+skeleton-fly-spritesheet-100
+  rotate: false
+  xy: 2, 102
+  size: 1112, 100
+  orig: 1112, 100
   offset: 0, 0
   index: -1

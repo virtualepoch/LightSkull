@@ -31,9 +31,9 @@ public class WorldContactListener implements ContactListener {
 
             case LightSkull.ENEMY_HEAD_BIT | LightSkull.PLAYER_BIT:
                 if(fixA.getFilterData().categoryBits == LightSkull.ENEMY_HEAD_BIT)
-                    ((Enemy)fixA.getUserData()).hitOnHead();
+                    ((Enemy)fixA.getUserData()).hitOnHead((Player) fixB.getUserData());
                 else
-                    ((Enemy)fixB.getUserData()).hitOnHead();
+                    ((Enemy)fixB.getUserData()).hitOnHead((Player) fixA.getUserData());
                 break;
 
             case LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT:
@@ -45,14 +45,14 @@ public class WorldContactListener implements ContactListener {
 
             case LightSkull.PLAYER_BIT | LightSkull.ENEMY_BIT:
                 if(fixA.getFilterData().categoryBits == LightSkull.PLAYER_BIT)
-                    ((Player) fixA.getUserData()).hit();
+                    ((Player) fixA.getUserData()).hit((Enemy)fixB.getUserData());
                 else
-                    ((Player) fixB.getUserData()).hit();
+                    ((Player) fixB.getUserData()).hit((Enemy)fixA.getUserData());
                 break;
 
             case LightSkull.ENEMY_BIT | LightSkull.ENEMY_BIT:
-                ((Enemy)fixA.getUserData()).reverseVelocity(true, false);
-                ((Enemy)fixB.getUserData()).reverseVelocity(true, false);
+                ((Enemy)fixA.getUserData()).onEnemyHit((Enemy)fixB.getUserData());
+                ((Enemy)fixB.getUserData()).onEnemyHit((Enemy)fixA.getUserData());
                 break;
 
             case LightSkull.ITEM_BIT | LightSkull.OBJECT_BIT:

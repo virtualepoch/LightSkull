@@ -14,6 +14,7 @@ public class LightSkull extends Game {
 	//create PPM (PIXELS PER METER) variable
 	public static final float PPM = 100;
 
+	public static final short NOTHING_BIT = 0;
 	public static final short GROUND_BIT = 1;
 	public static final short PLAYER_BIT = 2;
 	public static final short BRICK_BIT = 4;
@@ -42,6 +43,9 @@ public class LightSkull extends Game {
 		manager.load("audio/sounds/breakblock.wav", Sound.class);
 		manager.load("audio/sounds/powerup_spawn.wav", Sound.class);
 		manager.load("audio/sounds/powerup.wav", Sound.class);
+		manager.load("audio/sounds/powerdown.wav", Sound.class);
+		manager.load("audio/sounds/stomp.wav", Sound.class);
+		manager.load("audio/sounds/mariodie.wav", Sound.class);
 		manager.finishLoading();
 
 		setScreen(new PlayScreen(this));

@@ -1,5 +1,6 @@
 package com.virtualepoch.game.Sprites.Enemies;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.virtualepoch.game.LightSkull;
 import com.virtualepoch.game.Screens.PlayScreen;
+import com.virtualepoch.game.Sprites.Player;
 
 public class Goomba extends Enemy {
 
@@ -23,11 +25,11 @@ public class Goomba extends Enemy {
     public Goomba(PlayScreen screen, float x, float y) {
         super(screen, x, y);
         frames = new Array<TextureRegion>();
-        for(int i = 0; i < 2; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("goomba" ), i * 16, 0, 16, 16));
+        for(int i = 0; i < 11; i++)
+            frames.add(new TextureRegion(screen.getAtlas2().findRegion("skeleton-fly-spritesheet-100" ), i * 101, 0, 101, 100));
         walkAnimation = new Animation<TextureRegion>(0.2f, frames);
         stateTime = 0;
-        setBounds(getX(), getY(), 16 / LightSkull.PPM, 16 / LightSkull.PPM);
+        setBounds(getX(), getY(), 25 / LightSkull.PPM, 25 / LightSkull.PPM);
         setToDestroy = false;
         destroyed = false;
     }
@@ -49,7 +51,6 @@ public class Goomba extends Enemy {
 
     @Override
     protected void defineEnemy() {
-
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
@@ -57,7 +58,7 @@ public class Goomba extends Enemy {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(7 / LightSkull.PPM);
+        shape.setRadius(6 / LightSkull.PPM);
         fdef.filter.categoryBits = LightSkull.ENEMY_BIT;
         fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.PLAYER_BIT;
 
@@ -84,8 +85,17 @@ public class Goomba extends Enemy {
             super.draw(batch);
     }
 
+    public void onEnemyHit(Enemy enemy){
+        if(enemy instanceof Turtle && ((Turtle) enemy).currentState == Turtle.State.INJURED_KICKED)
+            setToDestroy = true;
+        else
+            reverseVelocity(true,false);
+
+    }
+
     @Override
-    public void hitOnHead() {
+    public void hitOnHead(Player player) {
         setToDestroy = true;
+        LightSkull.manager.get("audio/sounds/stomp.wav", Sound.class).play();
     }
 }
