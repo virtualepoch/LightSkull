@@ -24,12 +24,12 @@ public class Goomba extends Enemy {
 
     public Goomba(PlayScreen screen, float x, float y) {
         super(screen, x, y);
-        frames = new Array<TextureRegion>();
+        Array<TextureRegion> frames = new Array();
         for(int i = 0; i < 11; i++)
-            frames.add(new TextureRegion(screen.getAtlas2().findRegion("skeleton-fly-spritesheet-100" ), i * 101, 0, 101, 100));
-        walkAnimation = new Animation<TextureRegion>(0.2f, frames);
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("skull_fly_40" ), i * 40, 0, 40, 40));
+        walkAnimation = new Animation(0.2f, frames);
         stateTime = 0;
-        setBounds(getX(), getY(), 25 / LightSkull.PPM, 25 / LightSkull.PPM);
+        setBounds(getX(), getY(), 40 / LightSkull.PPM, 40 / LightSkull.PPM);
         setToDestroy = false;
         destroyed = false;
     }
@@ -39,7 +39,7 @@ public class Goomba extends Enemy {
         if(setToDestroy && !destroyed){
             world.destroyBody(b2body);
             destroyed = true;
-            setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba" ), 32, 0, 16, 16));
+            setRegion(new TextureRegion(screen.getAtlas().findRegion("spider_dead" ), 0, 0, 17, 13));
             stateTime = 0;
         }
         else if(!destroyed) {
@@ -58,7 +58,7 @@ public class Goomba extends Enemy {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(6 / LightSkull.PPM);
+        shape.setRadius(5 / LightSkull.PPM);
         fdef.filter.categoryBits = LightSkull.ENEMY_BIT;
         fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.PLAYER_BIT;
 
@@ -68,8 +68,8 @@ public class Goomba extends Enemy {
         //Create the Head here:
         PolygonShape head = new PolygonShape();
         Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-5, 8).scl(1 / LightSkull.PPM);
-        vertice[1] = new Vector2(5, 8).scl(1 / LightSkull.PPM);
+        vertice[0] = new Vector2(-15, 10).scl(1 / LightSkull.PPM);
+        vertice[1] = new Vector2(15, 10).scl(1 / LightSkull.PPM);
         vertice[2] = new Vector2(-3, 3).scl(1 / LightSkull.PPM);
         vertice[3] = new Vector2(-3, 3).scl(1 / LightSkull.PPM);
         head.set(vertice);

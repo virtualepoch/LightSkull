@@ -33,7 +33,7 @@ public class B2WorldCreator {
         Body body;
 
         //create ground bodies/fixtures
-        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
@@ -46,7 +46,7 @@ public class B2WorldCreator {
             body.createFixture(fdef);
         }
         //create pipe bodies/fixtures
-        for(MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;
@@ -60,21 +60,21 @@ public class B2WorldCreator {
             body.createFixture(fdef);
         }
         //create brick bodies/fixtures
-        for(MapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)){
             new Brick(screen, object);
         }
         //create coin bodies/fixtures
-        for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
+        for(MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
             new Coin(screen, object);
         }
         //create all goombas
         goombas = new Array<Goomba>();
-            for(MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
+            for(MapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)) {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
                 goombas.add(new Goomba(screen,rect.getX()/ LightSkull.PPM, rect.getY() / LightSkull.PPM));
         }
         turtles = new Array<Turtle>();
-        for(MapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)) {
+        for(MapObject object : map.getLayers().get(9).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             turtles.add(new Turtle(screen,rect.getX()/ LightSkull.PPM, rect.getY() / LightSkull.PPM));
         }

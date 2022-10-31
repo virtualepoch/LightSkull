@@ -3,6 +3,7 @@ package com.virtualepoch.game.Screens;
 import static com.virtualepoch.game.LightSkull.PPM;
 import static com.virtualepoch.game.LightSkull.V_HEIGHT;
 import static com.virtualepoch.game.LightSkull.V_WIDTH;
+import static com.virtualepoch.game.Sprites.Player.State.MOVING_UP;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -35,8 +36,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class PlayScreen implements Screen {
     private LightSkull game;
+
     private TextureAtlas atlas;
-    private TextureAtlas atlas2;
 
     //basic playscreen variables
     private OrthographicCamera gamecam;
@@ -62,8 +63,7 @@ public class PlayScreen implements Screen {
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
     public PlayScreen(LightSkull game) {
-        atlas = new TextureAtlas(("Mario_and_Enemies.pack"));
-        atlas2 = new TextureAtlas(("lightskull.atlas"));
+        atlas = new TextureAtlas(("lightskull.atlas"));
         this.game = game;
         gamecam = new OrthographicCamera();
 
@@ -76,7 +76,7 @@ public class PlayScreen implements Screen {
 
         //Load our map and setup our map renderer
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("level1a.tmx");
+        map = mapLoader.load("level1_1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / LightSkull.PPM);
 
         //Initially set our gamecam to be centered correctly at the start of the
@@ -96,7 +96,7 @@ public class PlayScreen implements Screen {
 
         world.setContactListener(new WorldContactListener());
 
-        music = LightSkull.manager.get("audio/music/fluffing.mp3", Music.class);
+        music = LightSkull.manager.get("audio/music/lv1_1.mp3", Music.class);
         music.setLooping(true);
         music.setVolume(0.05f);
         music.play();
@@ -121,9 +121,6 @@ public class PlayScreen implements Screen {
     public TextureAtlas getAtlas(){
         return atlas;
     }
-    public TextureAtlas getAtlas2(){
-        return atlas2;
-    }
 
     @Override
     public void show() {
@@ -135,12 +132,25 @@ public class PlayScreen implements Screen {
 //            gamecam.position.x += 100 * dt;
 
         if(player.currentState != Player.State.DEAD)
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP) || controller.isUpPressed())
+        // INPUT FOR JUMPING
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || controller.isAPressed())
             player.b2body.applyLinearImpulse(new Vector2(0, 1f),player.b2body.getWorldCenter(), true);
-        if(Gdx.input.isKeyPressed(Input.Keys.S) || controller.isRightPressed() && player.b2body.getLinearVelocity().x <= 2)
+        // INPUT FOR MOVING RIGHT
+        if(Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT) || controller.isRightPressed() && player.b2body.getLinearVelocity().x <= 2)
             player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-        if(Gdx.input.isKeyPressed(Input.Keys.A) || controller.isLeftPressed() && player.b2body.getLinearVelocity().x >= -2)
+        // INPUT FOR MOVING LEFT
+        if(Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT) || controller.isLeftPressed() && player.b2body.getLinearVelocity().x >= -2)
             player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
+        // INPUT FOR MOVING UP
+        if(Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP) || controller.isUpPressed()) {
+            player.movingUp = true;
+        } else
+            player.movingUp = false;
+        // INPUT FOR MOVING DOWN
+        if(Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN) || controller.isDownPressed()) {
+            player.movingDown = true;
+        } else
+            player.movingDown = false;
     }
 
     public void update(float dt){
@@ -215,7 +225,6 @@ public class PlayScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         gamePort.update(width,height);
-        controller.resize(width,height);
     }
 
     public TiledMap getMap(){

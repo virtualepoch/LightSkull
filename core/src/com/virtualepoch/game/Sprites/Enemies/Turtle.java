@@ -36,18 +36,18 @@ public class Turtle extends Enemy {
         Vector2 velocity2 = new Vector2(0.5f, -1);
         velocity = velocity2;
 
-        injured = new TextureRegion(screen.getAtlas2().findRegion("crawling-monster-50"),0,0,77,50);
+        injured = new TextureRegion(screen.getAtlas().findRegion("crawling-monster-50"),0,0,77,50);
 
         frames = new Array<TextureRegion>();
         for(int i = 0; i < 21; i++)
-            frames.add(new TextureRegion(screen.getAtlas2().findRegion("crawling-monster-50"),i * 77,0,77,50));
-        walkAnimation = new Animation<TextureRegion>(0.01f, frames);
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("crawling-monster-50"),i * 77,0,77,50));
+        walkAnimation = new Animation<TextureRegion>(0.05f, frames);
 
         currentState = previousState = State.WALKING;
         deadRotationDegrees = 0;
 
         // VVV === THIS IS THE SIZE OF THE SPRITE RENDERED ON THE PLAYSCREEN
-        setBounds(getX(),getY(),30 / LightSkull.PPM, 24 / LightSkull.PPM);
+        setBounds(getX(),getY(),50 / LightSkull.PPM, 40 / LightSkull.PPM);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class Turtle extends Enemy {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(6 / LightSkull.PPM);
+        shape.setRadius(10 / LightSkull.PPM);
         fdef.filter.categoryBits = LightSkull.ENEMY_BIT;
         fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.PLAYER_BIT;
 
@@ -69,8 +69,8 @@ public class Turtle extends Enemy {
         //Create the Head here:
         PolygonShape head = new PolygonShape();
         Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-5, 8).scl(1 / LightSkull.PPM);
-        vertice[1] = new Vector2(5, 8).scl(1 / LightSkull.PPM);
+        vertice[0] = new Vector2(-22, 11).scl(1 / LightSkull.PPM);
+        vertice[1] = new Vector2(22, 11).scl(1 / LightSkull.PPM);
         vertice[2] = new Vector2(-3, 3).scl(1 / LightSkull.PPM);
         vertice[3] = new Vector2(-3, 3).scl(1 / LightSkull.PPM);
         head.set(vertice);
@@ -136,7 +136,7 @@ public class Turtle extends Enemy {
         if(currentState == State.INJURED_STANDING && stateTime > 5){
             currentState = State.WALKING;
         }
-        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - 11 / LightSkull.PPM);
+        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - 16 / LightSkull.PPM);
 
         if(currentState == State.DEAD){
             deadRotationDegrees += 3;
