@@ -32,7 +32,7 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../../LightSkullAssets/items/shroom.png,type:Input,regionName:null},{path:../../LightSkullAssets/crawling-monster-50.png,type:Input,regionName:null},{path:../../LightSkullAssets/ls_walkdown.png,type:Input,regionName:null},{path:../../LightSkullAssets/ls_walkright.png,type:Input,regionName:null},{path:../../LightSkullAssets/ls_walkup.png,type:Input,regionName:null},{path:../../LightSkullAssets/spider_dead.png,type:Input,regionName:null},{path:../../LightSkullAssets/spider_walk.png,type:Input,regionName:null},{path:../../LightSkullAssets/wolv_run.png,type:Input,regionName:null},{path:../../LightSkullAssets/wolv_stand.png,type:Input,regionName:null},{path:../../LightSkullAssets/skeleton-fly-spritesheet-40.png,type:Input,regionName:null}]
+inputFiles=[{path:../../LightSkullAssets/monster_crawl59.png,type:Input,regionName:null},{path:../../LightSkullAssets/skeleton-fly-spritesheet-40.png,type:Input,regionName:null},{path:../../LightSkullAssets/spider_dead.png,type:Input,regionName:null},{path:../../LightSkullAssets/lightskull/lightskull_run.png,type:Input,regionName:null},{path:../../LightSkullAssets/lightskull/lightskull_stand.png,type:Input,regionName:null},{path:../../LightSkullAssets/items/shroom.png,type:Input,regionName:null}]
 keepInputFileExtensions=false
 
 

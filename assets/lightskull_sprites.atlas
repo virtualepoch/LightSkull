@@ -1,76 +1,48 @@
 
 lightskull_sprites.png
-size: 2048, 128
+size: 2048, 64
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-crawling-monster-50
+lightskull_run
   rotate: false
-  xy: 2, 65
-  size: 1617, 50
-  orig: 1617, 50
+  xy: 1436, 11
+  size: 265, 51
+  orig: 265, 51
   offset: 0, 0
   index: -1
-ls_walkdown
+lightskull_stand
   rotate: false
-  xy: 444, 15
-  size: 128, 48
-  orig: 128, 48
+  xy: 1703, 6
+  size: 90, 56
+  orig: 90, 56
   offset: 0, 0
   index: -1
-ls_walkright
+monster_crawl_59
   rotate: false
-  xy: 1888, 67
-  size: 128, 48
-  orig: 128, 48
-  offset: 0, 0
-  index: -1
-ls_walkup
-  rotate: false
-  xy: 574, 15
-  size: 128, 48
-  orig: 128, 48
+  xy: 2, 3
+  size: 990, 59
+  orig: 990, 59
   offset: 0, 0
   index: -1
 shroom
   rotate: false
-  xy: 2018, 97
+  xy: 994, 2
   size: 18, 18
   orig: 18, 18
   offset: 0, 0
   index: -1
 skull_fly_40
   rotate: false
-  xy: 2, 23
+  xy: 994, 22
   size: 440, 40
   orig: 440, 40
   offset: 0, 0
   index: -1
 spider_dead
   rotate: false
-  xy: 798, 50
+  xy: 1795, 49
   size: 34, 13
   orig: 34, 13
-  offset: 0, 0
-  index: -1
-spider_walk
-  rotate: false
-  xy: 2, 3
-  size: 32, 18
-  orig: 32, 18
-  offset: 0, 0
-  index: -1
-wolv_run
-  rotate: false
-  xy: 1621, 61
-  size: 265, 54
-  orig: 265, 54
-  offset: 0, 0
-  index: -1
-wolv_stand
-  rotate: false
-  xy: 704, 2
-  size: 92, 61
-  orig: 92, 61
   offset: 0, 0
   index: -1

@@ -36,18 +36,18 @@ public class Turtle extends Enemy {
         Vector2 velocity2 = new Vector2(0.5f, -1);
         velocity = velocity2;
 
-        injured = new TextureRegion(screen.getAtlas().findRegion("crawling-monster-50"),0,0,77,50);
+        injured = new TextureRegion(screen.getAtlas().findRegion("monster_crawl_59"),0,0,90,59);
 
         frames = new Array<TextureRegion>();
-        for(int i = 0; i < 21; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("crawling-monster-50"),i * 77,0,77,50));
-        walkAnimation = new Animation<TextureRegion>(0.05f, frames);
+        for(int i = 0; i < 11; i++)
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("monster_crawl_59"),i * 90,0,90,59));
+        walkAnimation = new Animation<TextureRegion>(0.07f, frames);
 
         currentState = previousState = State.WALKING;
         deadRotationDegrees = 0;
 
         // VVV === THIS IS THE SIZE OF THE SPRITE RENDERED ON THE PLAYSCREEN
-        setBounds(getX(),getY(),50 / LightSkull.PPM, 40 / LightSkull.PPM);
+        setBounds(getX(),getY(),80 / LightSkull.PPM, 60 / LightSkull.PPM);
     }
 
     @Override
