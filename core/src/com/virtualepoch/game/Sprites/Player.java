@@ -115,7 +115,7 @@ public class Player extends Sprite {
         // Define Player in box2d
         definePlayer();
         // !!! 'setBounds' is the method that determines Player size on screen
-        setBounds(0, 0, 40 / LightSkull.PPM, 50 / LightSkull.PPM);
+        setBounds(0, 0, 50 / LightSkull.PPM, 70 / LightSkull.PPM);
         // Set starting Sprite / Texture Region
         set(this);
     }
@@ -126,7 +126,7 @@ public class Player extends Sprite {
         if(playerIsBig)
             setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 - 6 / LightSkull.PPM);
         else
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 + 2 / LightSkull.PPM);
+            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 + 3 / LightSkull.PPM);
         /// ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ ///////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         setRegion(getFrame(dt));
@@ -262,12 +262,12 @@ public class Player extends Sprite {
         fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.ENEMY_HEAD_BIT | LightSkull.ITEM_BIT;
 
         fdef.shape = shape;
-        shape.setAsBox(10 / LightSkull.PPM, 17 / LightSkull.PPM);
+        shape.setAsBox(20 / LightSkull.PPM, 30 / LightSkull.PPM);
         b2body.createFixture(fdef).setUserData(this);
 
 
         EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2 / LightSkull.PPM, 17 / LightSkull.PPM), new Vector2(2 / LightSkull.PPM, 17 / LightSkull.PPM));
+        head.set(new Vector2(-2 / LightSkull.PPM, 20 / LightSkull.PPM), new Vector2(2 / LightSkull.PPM, 17 / LightSkull.PPM));
         fdef.filter.categoryBits = LightSkull.PLAYER_HEAD_BIT;
         fdef.shape = head;
         fdef.isSensor = true;

@@ -63,7 +63,7 @@ public class PlayScreen implements Screen {
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
     public PlayScreen(LightSkull game) {
-        atlas = new TextureAtlas(("lightskull.atlas"));
+        atlas = new TextureAtlas(("lightskull_sprites.atlas"));
         this.game = game;
         gamecam = new OrthographicCamera();
 
