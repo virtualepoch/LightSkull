@@ -1,5 +1,5 @@
 
-lightskull_sprites.png
+lightskull_sprites2.png
 size: 2048, 64
 format: RGBA8888
 filter: Nearest, Nearest
@@ -18,13 +18,13 @@ lightskull_stand
   orig: 90, 56
   offset: 0, 0
   index: -1
-monster_crawl_59
+monster_crawl
   rotate: false
   xy: 2, 3
   size: 990, 59
   orig: 990, 59
   offset: 0, 0
-  index: -1
+  index: 59
 shroom
   rotate: false
   xy: 994, 2
@@ -32,13 +32,13 @@ shroom
   orig: 18, 18
   offset: 0, 0
   index: -1
-skull_fly_40
+skull_fly
   rotate: false
   xy: 994, 22
   size: 440, 40
   orig: 440, 40
   offset: 0, 0
-  index: -1
+  index: 40
 spider_dead
   rotate: false
   xy: 1795, 49

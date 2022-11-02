@@ -20,8 +20,12 @@ import com.virtualepoch.game.Screens.PlayScreen;
 import com.virtualepoch.game.Sprites.Enemies.Enemy;
 import com.virtualepoch.game.Sprites.Enemies.Turtle;
 
+import java.awt.Event;
+
 
 public class Player extends Sprite {
+    public Vector2 velocity;
+
     public enum State { FALLING, JUMPING, STANDING, MOVING_RIGHT_LEFT, MOVING_UP, MOVING_DOWN, GROWING, DEAD };
     public State currentState;
     public State previousState;
@@ -49,9 +53,13 @@ public class Player extends Sprite {
     private boolean timeToDefineBigPlayer;
     private boolean timeToRedefinePlayer;
     private boolean playerIsDead;
+    
+    public boolean falling;
 
     private int lightskullRunWidth;
     private int lightskullRunHeight;
+    
+    public float firstY;
 
     public Player(PlayScreen screen){
 

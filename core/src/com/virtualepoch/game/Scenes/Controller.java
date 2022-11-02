@@ -1,13 +1,13 @@
 package com.virtualepoch.game.Scenes;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -21,6 +21,11 @@ public class Controller {
     int dPadBtnSize = 60;
     int btnPadding = 0;
 
+
+//    public int makeTransparent(Image image){
+//      image.setColor(355,355,355,0.5f);
+//    }    NEED TO FIGURE THIS OUT TO CLEAN THINGS UP
+
     public Controller(){
         cam = new OrthographicCamera();
         viewport = new FitViewport(LightSkull.V_WIDTH, LightSkull.V_HEIGHT, cam);
@@ -30,6 +35,7 @@ public class Controller {
         // IMAGE AND INPUT LISTENER FOR THE UP-BUTTON
         Image upBtn = new Image(new Texture("controller_btns/up_btn.png"));
         upBtn.setSize(dPadBtnSize, dPadBtnSize);
+        upBtn.setColor(355,355,355,0.5f);
         upBtn.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -47,6 +53,7 @@ public class Controller {
         // IMAGE AND INPUT LISTENER FOR THE LEFT-BUTTON
         Image leftBtn = new Image(new Texture("controller_btns/left_btn.png"));
         leftBtn.setSize(dPadBtnSize, dPadBtnSize);
+        leftBtn.setColor(355,355,355,0.5f);
         leftBtn.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -64,6 +71,7 @@ public class Controller {
         // IMAGE AND INPUT LISTENER FOR THE RIGHT-BUTTON
         Image rightBtn = new Image(new Texture("controller_btns/right_btn.png"));
         rightBtn.setSize(dPadBtnSize, dPadBtnSize);
+        rightBtn.setColor(355,355,355,0.5f);
         rightBtn.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -81,6 +89,7 @@ public class Controller {
         // IMAGE AND INPUT LISTENER FOR THE DOWN-BUTTON
         Image downBtn = new Image(new Texture("controller_btns/down_btn.png"));
         downBtn.setSize(dPadBtnSize, dPadBtnSize);
+        downBtn.setColor(355,355,355,0.5f);
         downBtn.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -98,6 +107,7 @@ public class Controller {
         // A-BUTTON
         Image aBtn = new Image(new Texture("controller_btns/a_btn.png"));
         aBtn.setSize(50, 50);
+        aBtn.setColor(355,355,355,0.5f);
         aBtn.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -115,6 +125,7 @@ public class Controller {
         // B-BUTTON
         Image bBtn = new Image(new Texture("controller_btns/b_btn.png"));
         bBtn.setSize(50, 50);
+        bBtn.setColor(355,355,355,0.5f);
         bBtn.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -196,4 +207,5 @@ public class Controller {
     public void resize(int width, int height){
         viewport.update(width,height);
     }
+
 }

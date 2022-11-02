@@ -62,6 +62,12 @@ public class PlayScreen implements Screen {
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
+    private boolean playerJumping;
+    private float PLAYER_JUMP_SPEED;
+    private long jumpPressedTime;
+    private long jumpEndTime;
+    private long highJumpPressTime;
+
     public PlayScreen(LightSkull game) {
         atlas = new TextureAtlas(("lightskull_sprites.atlas"));
         this.game = game;
@@ -103,6 +109,11 @@ public class PlayScreen implements Screen {
 
         items = new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
+
+        playerJumping = false;
+
+        highJumpPressTime = 1500;
+        jumpPressedTime = System.currentTimeMillis();
     }
 
     public void spawnItem(ItemDef idef){
@@ -132,9 +143,6 @@ public class PlayScreen implements Screen {
 //            gamecam.position.x += 100 * dt;
 
         if(player.currentState != Player.State.DEAD)
-        // INPUT FOR JUMPING
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || controller.isAPressed())
-            player.b2body.applyLinearImpulse(new Vector2(0, 1f),player.b2body.getWorldCenter(), true);
         // INPUT FOR MOVING RIGHT
         if(Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT) || controller.isRightPressed() && player.b2body.getLinearVelocity().x <= 2)
             player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
@@ -151,6 +159,30 @@ public class PlayScreen implements Screen {
             player.movingDown = true;
         } else
             player.movingDown = false;
+
+        ///////////////////////////////////////////////////////
+        // INPUT FOR JUMPING
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            playerJump();
+            player.falling = true;
+        }
+//////////////////////////////////////////////////////////////////////////////////////////
+
+        if(controller.isAPressed() && playerJumping == false && (player.b2body.getLinearVelocity().y < 1f)){
+            player.b2body.applyLinearImpulse(new Vector2(0, 5.1f),player.b2body.getWorldCenter(), true);
+        }
+        // INPUT FOR FIRING PROJECTILE
+        if(Gdx.input.isKeyJustPressed(Input.Keys.P) || controller.isBPressed())
+            player.b2body.applyLinearImpulse(new Vector2(2,0),player.b2body.getWorldCenter(),true);
+    }
+
+    public void endJump(){
+        playerJumping = true;
+    }
+
+    public void playerJump(){
+        player.b2body.applyLinearImpulse(new Vector2(0, 4f),player.b2body.getWorldCenter(), true);
+        player.falling = false;
     }
 
     public void update(float dt){

@@ -27,8 +27,8 @@ public class FireBall extends Projectile {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / LightSkull.PPM);
-        fdef.filter.categoryBits = LightSkull.ITEM_BIT;
-        fdef.filter.maskBits = LightSkull.PLAYER_BIT | LightSkull.OBJECT_BIT | LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT;
+        fdef.filter.categoryBits = LightSkull.PROJECTILE_BIT;
+        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.BRICK_BIT | LightSkull.COIN_BIT | LightSkull.ENEMY_BIT;
 
         fdef.shape = shape;
         body.createFixture(fdef).setUserData(this);

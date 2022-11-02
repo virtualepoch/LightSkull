@@ -26,7 +26,7 @@ public class Goomba extends Enemy {
         super(screen, x, y);
         Array<TextureRegion> frames = new Array();
         for(int i = 0; i < 11; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("skull_fly_40" ), i * 40, 0, 40, 40));
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("skull_fly" ), i * 40, 0, 40, 40));
         walkAnimation = new Animation(0.2f, frames);
         stateTime = 0;
         setBounds(getX(), getY(), 40 / LightSkull.PPM, 40 / LightSkull.PPM);

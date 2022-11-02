@@ -36,11 +36,11 @@ public class Turtle extends Enemy {
         Vector2 velocity2 = new Vector2(0.5f, -1);
         velocity = velocity2;
 
-        injured = new TextureRegion(screen.getAtlas().findRegion("monster_crawl_59"),0,0,90,59);
+        injured = new TextureRegion(screen.getAtlas().findRegion("monster_crawl"),0,0,90,59);
 
         frames = new Array<TextureRegion>();
         for(int i = 0; i < 11; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("monster_crawl_59"),i * 90,0,90,59));
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("monster_crawl"),i * 90,0,90,59));
         walkAnimation = new Animation<TextureRegion>(0.07f, frames);
 
         currentState = previousState = State.WALKING;
