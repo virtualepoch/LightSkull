@@ -18,8 +18,8 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setTitle("LightSkull");
-		config.setWindowedMode((int) screenSizeWidth, (int) screenSizeHeight);
-		config.setWindowedMode(2000, 1300);
+//		config.setWindowedMode((int) screenSizeWidth, (int) screenSizeHeight);
+		config.setWindowedMode(1800, 900);
 
 		new Lwjgl3Application(new LightSkull(), config);
 	}

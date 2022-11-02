@@ -63,9 +63,10 @@ public class PlayScreen implements Screen {
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
 
     private boolean playerJumping;
-    private float PLAYER_JUMP_SPEED;
-    private long jumpPressedTime;
-    private long jumpEndTime;
+    private float playerPosYBeforeJump;
+    private float playerPosYAfterJump;
+    private long startJump;
+    private long endJump;
     private long highJumpPressTime;
 
     public PlayScreen(LightSkull game) {
@@ -113,7 +114,6 @@ public class PlayScreen implements Screen {
         playerJumping = false;
 
         highJumpPressTime = 1500;
-        jumpPressedTime = System.currentTimeMillis();
     }
 
     public void spawnItem(ItemDef idef){
