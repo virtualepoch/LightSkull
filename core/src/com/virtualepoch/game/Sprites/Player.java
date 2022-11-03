@@ -40,7 +40,7 @@ public class Player extends Sprite {
     private Animation<TextureRegion> playerDead;
     private Animation<TextureRegion> growPlayer;
 
-    private TextureRegion bigPlayerStand;
+    private Animation<TextureRegion> bigPlayerStand;
     private Animation<TextureRegion> bigPlayerJump;
     private Animation<TextureRegion> bigPlayerRun;
 
@@ -109,7 +109,10 @@ public class Player extends Sprite {
         frames.clear();
 
         ///////////////////////// VVV === BIG OR ALTERED PLAYER SPRITE SHEETS
-        bigPlayerStand = new TextureRegion(screen.getAtlas().findRegion("lightskull_run"),0,0, lightskullRunWidth, lightskullRunHeight);
+        for(int i = 0; i < 2; i++)
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_stand"), i * 45, 0, 45, 56));
+        bigPlayerStand = new Animation(0.8f, frames);
+        frames.clear();
 
         for(int i = 0; i < 4; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"),i * lightskullRunWidth, 0, lightskullRunWidth, lightskullRunHeight));
@@ -122,8 +125,7 @@ public class Player extends Sprite {
 
         // Define Player in box2d
         definePlayer();
-        // !!! 'setBounds' is the method that determines Player size on screen
-        setBounds(0, 0, 50 / LightSkull.PPM, 70 / LightSkull.PPM);
+
         // Set starting Sprite / Texture Region
         set(this);
     }
@@ -132,9 +134,9 @@ public class Player extends Sprite {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // !!! THIS SETS THE POSITION OF THE SPRITE IMAGES ON THE BOX2D BODY CREATED !!! ////////////////////////////////////////////
         if(playerIsBig)
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 - 6 / LightSkull.PPM);
+            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         else
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 + 3 / LightSkull.PPM);
+            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         /// ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ ///////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         setRegion(getFrame(dt));
@@ -172,7 +174,7 @@ public class Player extends Sprite {
             case FALLING:
             case STANDING:
             default:
-                region = playerIsBig ? bigPlayerStand : (TextureRegion) playerStand.getKeyFrame(stateTimer,true);
+                region = playerIsBig ? (TextureRegion) bigPlayerStand.getKeyFrame(stateTimer,true) : (TextureRegion) playerStand.getKeyFrame(stateTimer,true);
                 break;
         }
         if((b2body.getLinearVelocity().x < 0 || !movingRight) && !region.isFlipX()){
@@ -216,7 +218,7 @@ public class Player extends Sprite {
         playerIsBig = true;
         timeToDefineBigPlayer = true;
         setBounds(getX(),getY()/ LightSkull.PPM,getWidth(),getHeight() + 10 / LightSkull.PPM);
-        LightSkull.manager.get("audio/sounds/powerup.wav", Sound.class).play();
+        LightSkull.manager.get("audio/sounds/powerup.wav", Sound.class).play(0.5f);
     }
 
     public void hit(Enemy enemy) {
@@ -227,12 +229,13 @@ public class Player extends Sprite {
                 playerIsBig = false;
                 timeToRedefinePlayer = true;
                 setBounds(getX(), getY(), getWidth(), getHeight() - 10 / LightSkull.PPM);
-                LightSkull.manager.get("audio/sounds/powerdown.wav", Sound.class).play();
+                LightSkull.manager.get("audio/sounds/powerdown.wav", Sound.class).play(0.5f);
             }
         else {
                 // FIX THIS !!!!!!!!!!! FOR SOME REASON CAN'T 'STOP' MUSIC... CAUSES CRASH
 //            LightSkull.manager.get("audio/music/fluffing.mp3", Sound.class).stop();
-                LightSkull.manager.get("audio/sounds/death.mp3", Sound.class).play();
+
+                LightSkull.manager.get("audio/sounds/death.mp3", Sound.class).play(0.7f);
                 playerIsDead = true;
                 Filter filter = new Filter();
                 filter.maskBits = LightSkull.NOTHING_BIT;
@@ -253,7 +256,7 @@ public class Player extends Sprite {
 
     public void definePlayer(){
         BodyDef bdef = new BodyDef();
-        bdef.position.set(100 / LightSkull.PPM, 333 / LightSkull.PPM);
+        bdef.position.set(100 / LightSkull.PPM, 300 / LightSkull.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -273,9 +276,12 @@ public class Player extends Sprite {
         shape.setAsBox(20 / LightSkull.PPM, 30 / LightSkull.PPM);
         b2body.createFixture(fdef).setUserData(this);
 
+        // !!! 'setBounds' is the method that determines Player sprite size on screen
+        setBounds(0, 0, 42 / LightSkull.PPM, 62 / LightSkull.PPM);
+        /////////////////////////////////////////////////////////////////////////////
 
         EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2 / LightSkull.PPM, 20 / LightSkull.PPM), new Vector2(2 / LightSkull.PPM, 17 / LightSkull.PPM));
+        head.set(new Vector2(-5 / LightSkull.PPM, 31 / LightSkull.PPM), new Vector2(5 / LightSkull.PPM, 31 / LightSkull.PPM));
         fdef.filter.categoryBits = LightSkull.PLAYER_HEAD_BIT;
         fdef.shape = head;
         fdef.isSensor = true;
@@ -293,17 +299,20 @@ public class Player extends Sprite {
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(17 / LightSkull.PPM);
+        PolygonShape shape = new PolygonShape();
         fdef.filter.categoryBits = LightSkull.PLAYER_BIT;
         fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.ENEMY_HEAD_BIT | LightSkull.ITEM_BIT;
 
         fdef.shape = shape;
-        shape.setPosition(new Vector2(0,-7 / LightSkull.PPM));
+        shape.setAsBox(30 / LightSkull.PPM, 40 / LightSkull.PPM);
         b2body.createFixture(fdef).setUserData(this);
 
+        // !!! 'setBounds' is the method that determines Player sprite size on screen
+        setBounds(0,0, 62 / LightSkull.PPM, 82 / LightSkull.PPM);
+        /////////////////////////////////////////////////////////////////////////////
+
         EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2 / LightSkull.PPM, 15 / LightSkull.PPM), new Vector2(2 / LightSkull.PPM, 15 / LightSkull.PPM));
+        head.set(new Vector2(-10 / LightSkull.PPM, 41 / LightSkull.PPM), new Vector2(10 / LightSkull.PPM, 41 / LightSkull.PPM));
         fdef.filter.categoryBits = LightSkull.PLAYER_HEAD_BIT;
         fdef.shape = head;
         fdef.isSensor = true;
@@ -336,12 +345,16 @@ public class Player extends Sprite {
         fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.ENEMY_HEAD_BIT | LightSkull.ITEM_BIT;
 
         fdef.shape = shape;
-        shape.setAsBox(4 / LightSkull.PPM, 13 / LightSkull.PPM);
+        shape.setAsBox(20 / LightSkull.PPM, 30 / LightSkull.PPM);
         b2body.createFixture(fdef).setUserData(this);
+
+        // !!! 'setBounds' is the method that determines Player sprite size on screen
+        setBounds(0, 0, 42 / LightSkull.PPM, 62 / LightSkull.PPM);
+        /////////////////////////////////////////////////////////////////////////////
 
 
         EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2 / LightSkull.PPM, 13 / LightSkull.PPM), new Vector2(2 / LightSkull.PPM, 13 / LightSkull.PPM));
+        head.set(new Vector2(-5 / LightSkull.PPM, 31 / LightSkull.PPM), new Vector2(5 / LightSkull.PPM, 31 / LightSkull.PPM));
         fdef.filter.categoryBits = LightSkull.PLAYER_HEAD_BIT;
         fdef.shape = head;
         fdef.isSensor = true;

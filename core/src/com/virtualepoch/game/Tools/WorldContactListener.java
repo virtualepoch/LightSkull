@@ -36,7 +36,7 @@ public class WorldContactListener implements ContactListener {
                     ((Enemy)fixB.getUserData()).hitOnHead((Player) fixA.getUserData());
                 break;
 
-            case LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT:
+            case LightSkull.ENEMY_BIT | LightSkull.GROUND_BIT:
                 if(fixA.getFilterData().categoryBits == LightSkull.ENEMY_BIT)
                     ((Enemy)fixA.getUserData()).reverseVelocity(true, false);
                 else

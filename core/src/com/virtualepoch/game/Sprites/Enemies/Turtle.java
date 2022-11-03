@@ -59,26 +59,27 @@ public class Turtle extends Enemy {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(10 / LightSkull.PPM);
+        shape.setRadius(20 / LightSkull.PPM);
         fdef.filter.categoryBits = LightSkull.ENEMY_BIT;
         fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.PLAYER_BIT;
 
         fdef.shape = shape;
+//        fdef.restitution = 1.5f;
         b2body.createFixture(fdef).setUserData(this);
 
         //Create the Head here:
-        PolygonShape head = new PolygonShape();
-        Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-22, 11).scl(1 / LightSkull.PPM);
-        vertice[1] = new Vector2(22, 11).scl(1 / LightSkull.PPM);
-        vertice[2] = new Vector2(-3, 3).scl(1 / LightSkull.PPM);
-        vertice[3] = new Vector2(-3, 3).scl(1 / LightSkull.PPM);
-        head.set(vertice);
-
-        fdef.shape = head;
-        fdef.restitution = 1.5f;
-        fdef.filter.categoryBits = LightSkull.ENEMY_HEAD_BIT;
-        b2body.createFixture(fdef).setUserData(this);
+//        PolygonShape head = new PolygonShape();
+//        Vector2[] vertice = new Vector2[4];
+//        vertice[0] = new Vector2(-20, 11).scl(1 / LightSkull.PPM);
+//        vertice[1] = new Vector2(20, 11).scl(1 / LightSkull.PPM);
+//        vertice[2] = new Vector2(-3, 3).scl(1 / LightSkull.PPM);
+//        vertice[3] = new Vector2(-3, 3).scl(1 / LightSkull.PPM);
+//        head.set(vertice);
+//
+//        fdef.shape = head;
+//        fdef.restitution = 1.5f;
+//        fdef.filter.categoryBits = LightSkull.ENEMY_HEAD_BIT;
+//        b2body.createFixture(fdef).setUserData(this);
     }
 
     public void draw(Batch batch){
@@ -136,7 +137,7 @@ public class Turtle extends Enemy {
         if(currentState == State.INJURED_STANDING && stateTime > 5){
             currentState = State.WALKING;
         }
-        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - 16 / LightSkull.PPM);
+        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
 
         if(currentState == State.DEAD){
             deadRotationDegrees += 3;

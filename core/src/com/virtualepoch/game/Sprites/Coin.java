@@ -14,11 +14,11 @@ import com.virtualepoch.game.Sprites.TileObjects.InteractiveTileObject;
 public class Coin extends InteractiveTileObject {
 
     private static TiledMapTileSet tileSet;
-    private final int BLANK_COIN = 28;
+    private final int BLANK_COIN = 6923;
 
     public Coin(PlayScreen screen, MapObject object){
         super(screen, object);
-        tileSet = map.getTileSets().getTileSet("tileset_gutter");
+        tileSet = map.getTileSets().getTileSet("level1_1_tileset");
         fixture.setUserData(this);
         setCategoryFilter(LightSkull.COIN_BIT);
     }
@@ -30,7 +30,7 @@ public class Coin extends InteractiveTileObject {
         else {
             if(object.getProperties().containsKey("mushroom")){
                 screen.spawnItem(new ItemDef(new Vector2(body.getPosition().x, body.getPosition().y + 16/ LightSkull.PPM), Mushroom.class));
-                LightSkull.manager.get("audio/sounds/powerup_spawn.wav", Sound.class).play();
+                LightSkull.manager.get("audio/sounds/powerup_spawn.wav", Sound.class).play(0.5f);
             }
             else
                 LightSkull.manager.get("audio/sounds/coin.wav", Sound.class).play();

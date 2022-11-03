@@ -58,7 +58,7 @@ public class Goomba extends Enemy {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(5 / LightSkull.PPM);
+        shape.setRadius(10 / LightSkull.PPM);
         fdef.filter.categoryBits = LightSkull.ENEMY_BIT;
         fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.PLAYER_BIT;
 
@@ -68,8 +68,8 @@ public class Goomba extends Enemy {
         //Create the Head here:
         PolygonShape head = new PolygonShape();
         Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-15, 10).scl(1 / LightSkull.PPM);
-        vertice[1] = new Vector2(15, 10).scl(1 / LightSkull.PPM);
+        vertice[0] = new Vector2(-10, 10).scl(1 / LightSkull.PPM);
+        vertice[1] = new Vector2(10, 10).scl(1 / LightSkull.PPM);
         vertice[2] = new Vector2(-3, 3).scl(1 / LightSkull.PPM);
         vertice[3] = new Vector2(-3, 3).scl(1 / LightSkull.PPM);
         head.set(vertice);

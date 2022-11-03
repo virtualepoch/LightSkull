@@ -20,13 +20,15 @@ public abstract class Item extends Sprite {
     public Item(PlayScreen screen, float x, float y){
         this.screen = screen;
         this.world = screen.getWorld();
+
         setPosition(x,y);
         setBounds(getX(),getY(),16/ LightSkull.PPM,16/ LightSkull.PPM);
         defineItem();
         toDestroy = false;
         destroyed = false;
     }
-public abstract void defineItem();
+
+    public abstract void defineItem();
     public abstract void use(Player player);
 
     public void update(float dt){

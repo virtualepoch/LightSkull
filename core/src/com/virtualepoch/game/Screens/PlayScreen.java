@@ -28,10 +28,12 @@ import com.virtualepoch.game.Sprites.Enemies.Enemy;
 import com.virtualepoch.game.Sprites.Items.Item;
 import com.virtualepoch.game.Sprites.Items.ItemDef;
 import com.virtualepoch.game.Sprites.Items.Mushroom;
+import com.virtualepoch.game.Sprites.Other.Bullet;
 import com.virtualepoch.game.Sprites.Player;
 import com.virtualepoch.game.Tools.B2WorldCreator;
 import com.virtualepoch.game.Tools.WorldContactListener;
 
+import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class PlayScreen implements Screen {
@@ -61,13 +63,6 @@ public class PlayScreen implements Screen {
 
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
-
-    private boolean playerJumping;
-    private float playerPosYBeforeJump;
-    private float playerPosYAfterJump;
-    private long startJump;
-    private long endJump;
-    private long highJumpPressTime;
 
     public PlayScreen(LightSkull game) {
         atlas = new TextureAtlas(("lightskull_sprites.atlas"));
@@ -105,15 +100,11 @@ public class PlayScreen implements Screen {
 
         music = LightSkull.manager.get("audio/music/lv1_1.mp3", Music.class);
         music.setLooping(true);
-        music.setVolume(0.05f);
+        music.setVolume(0.4f);
         music.play();
 
         items = new Array<Item>();
         itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
-
-        playerJumping = false;
-
-        highJumpPressTime = 1500;
     }
 
     public void spawnItem(ItemDef idef){
@@ -160,29 +151,25 @@ public class PlayScreen implements Screen {
         } else
             player.movingDown = false;
 
-        ///////////////////////////////////////////////////////
-        // INPUT FOR JUMPING
+        ////////////////// INPUT FOR JUMPING WITH KEYBOARD //////////////////////////////////////////////////////////////////////////////////
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             playerJump();
             player.falling = true;
         }
-//////////////////////////////////////////////////////////////////////////////////////////
-
-        if(controller.isAPressed() && playerJumping == false && (player.b2body.getLinearVelocity().y < 1f)){
+        ////////////////// INPUT FOR JUMPING WITH CONTROLLER /////////////////////////////////////////////////////////////////////////////////////////////////////
+        if(controller.isAPressed() && (player.b2body.getLinearVelocity().y < 1f)){
             player.b2body.applyLinearImpulse(new Vector2(0, 5.1f),player.b2body.getWorldCenter(), true);
         }
-        // INPUT FOR FIRING PROJECTILE
-        if(Gdx.input.isKeyJustPressed(Input.Keys.P) || controller.isBPressed())
-            player.b2body.applyLinearImpulse(new Vector2(2,0),player.b2body.getWorldCenter(),true);
-    }
 
-    public void endJump(){
-        playerJumping = true;
+        ///////////////// INPUT FOR FIRING PROJECTILE ///////////////////////////////////////////////////////////////////////
+        if(Gdx.input.isKeyJustPressed(Input.Keys.P) | controller.isBPressed()) {
+            System.out.println("P pressed");
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     public void playerJump(){
         player.b2body.applyLinearImpulse(new Vector2(0, 4f),player.b2body.getWorldCenter(), true);
-        player.falling = false;
     }
 
     public void update(float dt){
@@ -230,11 +217,15 @@ public class PlayScreen implements Screen {
 
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
+
         player.draw(game.batch);
+
         for(Enemy enemy : creator.getEnemies())
             enemy.draw(game.batch);
+
         for(Item item : items)
             item.draw(game.batch);
+
         game.batch.end();
 
         //Set our batch to now draw what the Hud camera sees.
