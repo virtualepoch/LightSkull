@@ -29,7 +29,7 @@ public class Goomba extends Enemy {
             frames.add(new TextureRegion(screen.getAtlas().findRegion("skull_fly" ), i * 40, 0, 40, 40));
         walkAnimation = new Animation(0.2f, frames);
         stateTime = 0;
-        setBounds(getX(), getY(), 40 / LightSkull.PPM, 40 / LightSkull.PPM);
+        setBounds(getX(), getY(), 60 / LightSkull.PPM, 60 / LightSkull.PPM);
         setToDestroy = false;
         destroyed = false;
     }
@@ -44,7 +44,7 @@ public class Goomba extends Enemy {
         }
         else if(!destroyed) {
             b2body.setLinearVelocity(velocity);
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+            setPosition(b2body.getPosition().x - getWidth() / 2 + 4 / LightSkull.PPM, b2body.getPosition().y - getHeight() / 2 + 3 / LightSkull.PPM);
             setRegion(walkAnimation.getKeyFrame(stateTime,true));
         }
     }
@@ -58,7 +58,7 @@ public class Goomba extends Enemy {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(10 / LightSkull.PPM);
+        shape.setRadius(23 / LightSkull.PPM);
         fdef.filter.categoryBits = LightSkull.ENEMY_BIT;
         fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.PLAYER_BIT;
 

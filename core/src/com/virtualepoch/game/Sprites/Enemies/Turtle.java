@@ -58,13 +58,17 @@ public class Turtle extends Enemy {
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(20 / LightSkull.PPM);
+
+//        CircleShape shape = new CircleShape();
+//        shape.setRadius(30 / LightSkull.PPM);
+
+        PolygonShape shape = new PolygonShape();
+
+        fdef.shape = shape;
         fdef.filter.categoryBits = LightSkull.ENEMY_BIT;
         fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.PLAYER_BIT;
 
-        fdef.shape = shape;
-//        fdef.restitution = 1.5f;
+        shape.setAsBox(30 / LightSkull.PPM, 23 / LightSkull.PPM);
         b2body.createFixture(fdef).setUserData(this);
 
         //Create the Head here:
