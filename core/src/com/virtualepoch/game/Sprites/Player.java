@@ -93,10 +93,10 @@ public class Player extends Sprite {
         playerMoveDown = new Animation(0.1f, frames);
         frames.clear();
         for(int i = 0; i < 5; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * 53, 0, lightskullRunWidth, lightskullRunHeight));
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightskullRunWidth, 0, lightskullRunWidth, lightskullRunHeight));
         playerJump = new Animation(0.1f, frames);
         frames.clear();
-        for(int i = 0; i < 5; i++)
+        for(int i = 0; i < 2; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_stand"), i * 45, 0, 45, 56));
         playerDead = new Animation(0.4f, frames);
         frames.clear();
@@ -114,11 +114,11 @@ public class Player extends Sprite {
         bigPlayerStand = new Animation(0.8f, frames);
         frames.clear();
 
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < 5; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"),i * lightskullRunWidth, 0, lightskullRunWidth, lightskullRunHeight));
         bigPlayerRun = new Animation(0.1f, frames);
         frames.clear();
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < 5; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightskullRunWidth, 0, lightskullRunWidth, lightskullRunHeight));
         bigPlayerJump = new Animation(0.1f, frames);
         frames.clear();
