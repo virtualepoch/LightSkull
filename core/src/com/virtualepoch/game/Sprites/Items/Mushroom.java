@@ -11,8 +11,8 @@ import com.virtualepoch.game.Sprites.Player;
 public class Mushroom extends Item {
     public Mushroom(PlayScreen screen, float x, float y) {
         super(screen, x, y);
-        setRegion(screen.getAtlas().findRegion("shroom"), 0, 0,18,18);
-        velocity = new Vector2(0.7f,-1);
+        setRegion(screen.getAtlas().findRegion("shroom"), 0, 0,18,10);
+        velocity = new Vector2(5f,0);
     }
 
     @Override
@@ -34,8 +34,8 @@ public class Mushroom extends Item {
 
     @Override
     public void use(Player player) {
-        destroy();
-        player.grow();
+//        destroy();
+//        player.grow();
     }
 
     @Override

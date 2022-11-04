@@ -164,6 +164,7 @@ public class PlayScreen implements Screen {
         ///////////////// INPUT FOR FIRING PROJECTILE ///////////////////////////////////////////////////////////////////////
         if(Gdx.input.isKeyJustPressed(Input.Keys.P) | controller.isBPressed()) {
             System.out.println("P pressed");
+            spawnItem(new ItemDef(new Vector2(player.b2body.getPosition().x + 20/ PPM, player.b2body.getPosition().y + 25/LightSkull.PPM), Mushroom.class));
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
