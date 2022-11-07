@@ -1,6 +1,5 @@
 package com.virtualepoch.game.Tools;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -8,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.virtualepoch.game.LightSkull;
 import com.virtualepoch.game.Sprites.Enemies.Enemy;
-import com.virtualepoch.game.Sprites.Items.Item;
+import com.virtualepoch.game.Sprites.Projectiles.Projectile;
 import com.virtualepoch.game.Sprites.Player;
 import com.virtualepoch.game.Sprites.TileObjects.InteractiveTileObject;
 
@@ -31,9 +30,9 @@ public class WorldContactListener implements ContactListener {
 
             case LightSkull.ENEMY_HEAD_BIT | LightSkull.PLAYER_BIT:
                 if(fixA.getFilterData().categoryBits == LightSkull.ENEMY_HEAD_BIT)
-                    ((Enemy)fixA.getUserData()).hitOnHead((Player) fixB.getUserData());
+                    ((Enemy)fixA.getUserData()).hitByLaser((Player) fixB.getUserData());
                 else
-                    ((Enemy)fixB.getUserData()).hitOnHead((Player) fixA.getUserData());
+                    ((Enemy)fixB.getUserData()).hitByLaser((Player) fixA.getUserData());
                 break;
 
             case LightSkull.ENEMY_BIT | LightSkull.GROUND_BIT:
@@ -55,18 +54,18 @@ public class WorldContactListener implements ContactListener {
                 ((Enemy)fixB.getUserData()).onEnemyHit((Enemy)fixA.getUserData());
                 break;
 
-            case LightSkull.ITEM_BIT | LightSkull.OBJECT_BIT:
-                if(fixA.getFilterData().categoryBits == LightSkull.ITEM_BIT)
-                    ((Item)fixA.getUserData()).reverseVelocity(true, false);
+            case LightSkull.PROJECTILE_BIT | LightSkull.ENEMY_BIT:
+                if(fixA.getFilterData().categoryBits == LightSkull.PROJECTILE_BIT)
+                    ((Projectile)fixA.getUserData()).hitEnemy((Enemy)fixB.getUserData());
                 else
-                    ((Item)fixB.getUserData()).reverseVelocity(true, false);
+                    ((Projectile)fixB.getUserData()).hitEnemy((Enemy)fixA.getUserData());
                 break;
 
-            case LightSkull.ITEM_BIT | LightSkull.PLAYER_BIT:
-                if(fixA.getFilterData().categoryBits == LightSkull.ITEM_BIT)
-                    ((Item)fixA.getUserData()).use((Player) fixB.getUserData());
+            case LightSkull.PROJECTILE_BIT | LightSkull.GROUND_BIT:
+                if(fixA.getFilterData().categoryBits == LightSkull.PROJECTILE_BIT)
+                    ((Projectile)fixA.getUserData()).hitObject();
                 else if(!(fixA.getUserData()instanceof String))
-                    ((Item)fixB.getUserData()).use((Player) fixA.getUserData());
+                    ((Projectile)fixB.getUserData()).hitObject();
                 break;
         }
     }

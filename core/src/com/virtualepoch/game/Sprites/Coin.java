@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.virtualepoch.game.LightSkull;
 import com.virtualepoch.game.Scenes.Hud;
 import com.virtualepoch.game.Screens.PlayScreen;
-import com.virtualepoch.game.Sprites.Items.ItemDef;
-import com.virtualepoch.game.Sprites.Items.Mushroom;
+import com.virtualepoch.game.Sprites.Projectiles.ProjectileDef;
+import com.virtualepoch.game.Sprites.Projectiles.SmallLaser;
 import com.virtualepoch.game.Sprites.TileObjects.InteractiveTileObject;
 
 public class Coin extends InteractiveTileObject {
@@ -29,7 +29,7 @@ public class Coin extends InteractiveTileObject {
             LightSkull.manager.get("audio/sounds/bump.wav", Sound.class).play();
         else {
             if(object.getProperties().containsKey("mushroom")){
-                screen.spawnItem(new ItemDef(new Vector2(body.getPosition().x, body.getPosition().y + 16/ LightSkull.PPM), Mushroom.class));
+                screen.spawnProjectile(new ProjectileDef(new Vector2(body.getPosition().x, body.getPosition().y + 16/ LightSkull.PPM), SmallLaser.class));
                 LightSkull.manager.get("audio/sounds/powerup_spawn.wav", Sound.class).play(0.5f);
             }
             else

@@ -32,7 +32,7 @@ limitMemory=true
 useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:../../LightSkullAssets/items/shroom.png,type:Input,regionName:null},{path:../../LightSkullAssets/lightskull/lightskull_stand.png,type:Input,regionName:null},{path:../../LightSkullAssets/lightskull/lightskull_run.png,type:Input,regionName:null},{path:../../LightSkullAssets/lightskull_enemies/monster_crawl_59.png,type:Input,regionName:null},{path:../../LightSkullAssets/lightskull_enemies/skull_fly_40.png,type:Input,regionName:null},{path:../../LightSkullAssets/lightskull_enemies/spider_dead.png,type:Input,regionName:null}]
+inputFiles=[{path:../../LightSkullAssets/lightskull/lightskull_stand.png,type:Input,regionName:null},{path:../../LightSkullAssets/lightskull/lightskull_run.png,type:Input,regionName:null},{path:../../LightSkullAssets/lightskull_enemies/monster_crawl_59.png,type:Input,regionName:null},{path:../../LightSkullAssets/lightskull_enemies/skull_fly_40.png,type:Input,regionName:null},{path:../../LightSkullAssets/lightskull_enemies/spider_dead.png,type:Input,regionName:null},{path:../../LightSkullAssets/fireball/fireball.png,type:Input,regionName:null}]
 keepInputFileExtensions=false
 
 

@@ -1,7 +1,6 @@
 package com.virtualepoch.game.Scenes;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -9,15 +8,21 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.virtualepoch.game.LightSkull;
 
-public class Controller {
+public class Controller implements Disposable {
     Viewport viewport;
     public Stage stage;
-    boolean upPressed, leftPressed, rightPressed, downPressed, aPressed, bPressed;
     OrthographicCamera cam;
+
+    boolean upPressed, leftPressed, rightPressed, downPressed, aPressed, bPressed;
+
+    long touchDownTime;
+    long touchUpTime;
+
     int dPadBtnSize = 60;
     int btnPadding = 0;
 
@@ -113,12 +118,14 @@ public class Controller {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchDown(event, x, y, pointer, button);
                 aPressed = true;
+                touchDownTime = System.currentTimeMillis();
                 return true;
             }
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 aPressed = false;
+                touchUpTime = System.currentTimeMillis();
             }
         });
 
@@ -133,11 +140,11 @@ public class Controller {
                 bPressed = true;
                 return true;
             }
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
-                bPressed = false;
-            }
+//            @Override
+//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//                super.touchUp(event, x, y, pointer, button);
+//                bPressed = false;
+//            }
         });
 
 
@@ -202,6 +209,17 @@ public class Controller {
 
     public boolean isBPressed() {
         return bPressed;
+    }
+
+    public boolean bHasBeenPressed() { return bPressed = false; }
+
+    public long getTouchDownTime() { return touchDownTime; }
+
+    public long getTouchUpTime() { return touchUpTime; }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
     }
 
     public void resize(int width, int height){

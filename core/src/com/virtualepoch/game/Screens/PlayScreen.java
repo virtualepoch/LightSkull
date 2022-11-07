@@ -3,7 +3,6 @@ package com.virtualepoch.game.Screens;
 import static com.virtualepoch.game.LightSkull.PPM;
 import static com.virtualepoch.game.LightSkull.V_HEIGHT;
 import static com.virtualepoch.game.LightSkull.V_WIDTH;
-import static com.virtualepoch.game.Sprites.Player.State.MOVING_UP;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -25,15 +24,13 @@ import com.virtualepoch.game.LightSkull;
 import com.virtualepoch.game.Scenes.Controller;
 import com.virtualepoch.game.Scenes.Hud;
 import com.virtualepoch.game.Sprites.Enemies.Enemy;
-import com.virtualepoch.game.Sprites.Items.Item;
-import com.virtualepoch.game.Sprites.Items.ItemDef;
-import com.virtualepoch.game.Sprites.Items.Mushroom;
-import com.virtualepoch.game.Sprites.Other.Bullet;
+import com.virtualepoch.game.Sprites.Projectiles.Projectile;
+import com.virtualepoch.game.Sprites.Projectiles.ProjectileDef;
+import com.virtualepoch.game.Sprites.Projectiles.SmallLaser;
 import com.virtualepoch.game.Sprites.Player;
 import com.virtualepoch.game.Tools.B2WorldCreator;
 import com.virtualepoch.game.Tools.WorldContactListener;
 
-import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class PlayScreen implements Screen {
@@ -61,8 +58,9 @@ public class PlayScreen implements Screen {
 
     private Music music;
 
-    private Array<Item> items;
-    private LinkedBlockingQueue<ItemDef> itemsToSpawn;
+    private Array<Projectile> projectiles;
+    private LinkedBlockingQueue<ProjectileDef> projectilesToSpawn;
+    private boolean projectileFired;
 
     public PlayScreen(LightSkull game) {
         atlas = new TextureAtlas(("lightskull_sprites.atlas"));
@@ -93,7 +91,7 @@ public class PlayScreen implements Screen {
         //implement the world creator
         creator = new B2WorldCreator(this);
 
-        //create mario in our game world
+        //create player in our game world
         player = new Player(this);
 
         world.setContactListener(new WorldContactListener());
@@ -103,19 +101,26 @@ public class PlayScreen implements Screen {
         music.setVolume(0.4f);
         music.play();
 
-        items = new Array<Item>();
-        itemsToSpawn = new LinkedBlockingQueue<ItemDef>();
+        projectiles = new Array<Projectile>();
+        projectilesToSpawn = new LinkedBlockingQueue<ProjectileDef>();
+        projectileFired = false;
     }
 
-    public void spawnItem(ItemDef idef){
-        itemsToSpawn.add(idef);
+    public void spawnProjectile(ProjectileDef idef){
+        projectilesToSpawn.add(idef);
     }
 
-    public void handleSpawingItems(){
-        if(!itemsToSpawn.isEmpty()){
-            ItemDef idef = itemsToSpawn.poll();
-            if(idef.type == Mushroom.class){
-                items.add(new Mushroom(this, idef.position.x, idef.position.y));
+    public void handleSpawingProjectiles(){
+
+        if(!projectilesToSpawn.isEmpty()){
+            ProjectileDef idef = projectilesToSpawn.poll();
+            if(idef.type == SmallLaser.class){
+                projectiles.add(new SmallLaser(this, idef.position.x, idef.position.y));
+            }
+            for(Projectile projectile : projectiles){
+                if(player.isFlipX() && !controller.bHasBeenPressed() && (projectile.getState() != Projectile.State.MOVING_RIGHT_LEFT)){
+                    projectile.reverseVelocity();
+                }
             }
         }
     }
@@ -135,10 +140,10 @@ public class PlayScreen implements Screen {
 
         if(player.currentState != Player.State.DEAD)
         // INPUT FOR MOVING RIGHT
-        if(Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT) || controller.isRightPressed() && player.b2body.getLinearVelocity().x <= 2)
+        if((Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT) || controller.isRightPressed()) && player.b2body.getLinearVelocity().x <= 2)
             player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
         // INPUT FOR MOVING LEFT
-        if(Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT) || controller.isLeftPressed() && player.b2body.getLinearVelocity().x >= -2)
+        if((Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT) || controller.isLeftPressed()) && player.b2body.getLinearVelocity().x >= -2)
             player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
         // INPUT FOR MOVING UP
         if(Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP) || controller.isUpPressed()) {
@@ -151,32 +156,39 @@ public class PlayScreen implements Screen {
         } else
             player.movingDown = false;
 
-        ////////////////// INPUT FOR JUMPING WITH KEYBOARD //////////////////////////////////////////////////////////////////////////////////
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            playerJump();
-            player.falling = true;
-        }
-        ////////////////// INPUT FOR JUMPING WITH CONTROLLER /////////////////////////////////////////////////////////////////////////////////////////////////////
-        if(controller.isAPressed() && (player.b2body.getLinearVelocity().y < 1f)){
-            player.b2body.applyLinearImpulse(new Vector2(0, 5.1f),player.b2body.getWorldCenter(), true);
+        ////////////////// INPUT FOR JUMPING /////////////////////////////////////////////////////////////////////////////////////////////////////
+        if((Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || (controller.isAPressed())) && (player.getState() == Player.State.STANDING || player.getState() == Player.State.MOVING_RIGHT_LEFT)){
+            if((controller.getTouchUpTime() - controller.getTouchDownTime()) < 100)
+                player.b2body.applyLinearImpulse(new Vector2(0, 4f),player.b2body.getWorldCenter(), true);
+            if((controller.getTouchUpTime() - controller.getTouchDownTime()) > 100)
+                player.b2body.applyLinearImpulse(new Vector2(0, 8f),player.b2body.getWorldCenter(), true);
+
         }
 
-        ///////////////// INPUT FOR FIRING PROJECTILE ///////////////////////////////////////////////////////////////////////
-        if(Gdx.input.isKeyJustPressed(Input.Keys.P) | controller.isBPressed()) {
-            System.out.println("P pressed");
-            spawnItem(new ItemDef(new Vector2(player.b2body.getPosition().x + 20/ PPM, player.b2body.getPosition().y + 25/LightSkull.PPM), Mushroom.class));
+        ///////////////// KEYBOARD INPUT FOR FIRING PROJECTILE ///////////////////////////////////////////////////////////////////////
+        if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            if(player.isFlipX()){
+                spawnProjectile(new ProjectileDef(new Vector2(player.b2body.getPosition().x - 20 / PPM, player.b2body.getPosition().y + 25 / LightSkull.PPM), SmallLaser.class));
+            }else{
+                spawnProjectile(new ProjectileDef(new Vector2(player.b2body.getPosition().x + 20/ PPM, player.b2body.getPosition().y + 25/LightSkull.PPM), SmallLaser.class));
+            }
         }
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    }
-
-    public void playerJump(){
-        player.b2body.applyLinearImpulse(new Vector2(0, 4f),player.b2body.getWorldCenter(), true);
+        ///////////////// CONTROLLER INPUT FOR FIRING PROJECTILE ///////////////////////////////////////////////////////////////////////
+        if(controller.isBPressed()) {
+            if(player.isFlipX()){
+                spawnProjectile(new ProjectileDef(new Vector2(player.b2body.getPosition().x - 20 / PPM, player.b2body.getPosition().y + 25 / LightSkull.PPM), SmallLaser.class));
+                controller.bHasBeenPressed();
+            }else{
+                spawnProjectile(new ProjectileDef(new Vector2(player.b2body.getPosition().x + 20/ PPM, player.b2body.getPosition().y + 25/LightSkull.PPM), SmallLaser.class));
+                controller.bHasBeenPressed();
+            }
+        }
     }
 
     public void update(float dt){
         //handle user input first
         handleInput(dt);
-        handleSpawingItems();
+        handleSpawingProjectiles();
 
         world.step(1/60f, 6, 2);
 
@@ -187,8 +199,8 @@ public class PlayScreen implements Screen {
                 enemy.b2body.setActive(true);
         }
 
-        for(Item item : items)
-            item.update(dt);
+        for(Projectile projectile : projectiles)
+            projectile.update(dt);
 
         hud.update(dt);
 
@@ -222,10 +234,10 @@ public class PlayScreen implements Screen {
         for(Enemy enemy : creator.getEnemies())
             enemy.draw(game.batch);
 
-        for(Item item : items)
-            item.draw(game.batch);
-
         player.draw(game.batch);
+
+        for(Projectile projectile : projectiles)
+            projectile.draw(game.batch);
 
         game.batch.end();
 
@@ -281,5 +293,6 @@ public class PlayScreen implements Screen {
         world.dispose();
         b2dr.dispose();
         hud.dispose();
+        controller.dispose();
     }
 }

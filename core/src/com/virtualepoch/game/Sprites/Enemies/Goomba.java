@@ -18,16 +18,16 @@ public class Goomba extends Enemy {
 
     private float stateTime;
     private Animation<TextureRegion> walkAnimation;
-    private Array<TextureRegion> frames;
     private boolean setToDestroy;
     private boolean destroyed;
 
     public Goomba(PlayScreen screen, float x, float y) {
         super(screen, x, y);
-        Array<TextureRegion> frames = new Array();
+        Array<TextureRegion> frames = new Array<>();
         for(int i = 0; i < 11; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("skull_fly" ), i * 40, 0, 40, 40));
         walkAnimation = new Animation(0.2f, frames);
+        frames.clear();
         stateTime = 0;
         setBounds(getX(), getY(), 60 / LightSkull.PPM, 60 / LightSkull.PPM);
         setToDestroy = false;
@@ -60,7 +60,7 @@ public class Goomba extends Enemy {
         CircleShape shape = new CircleShape();
         shape.setRadius(23 / LightSkull.PPM);
         fdef.filter.categoryBits = LightSkull.ENEMY_BIT;
-        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.PLAYER_BIT;
+        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.OBJECT_BIT | LightSkull.BRICK_BIT | LightSkull.COIN_BIT | LightSkull.PLAYER_BIT  | LightSkull.ENEMY_BIT | LightSkull.PROJECTILE_BIT;
 
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
@@ -94,7 +94,7 @@ public class Goomba extends Enemy {
     }
 
     @Override
-    public void hitOnHead(Player player) {
+    public void hitByLaser(Player player) {
         setToDestroy = true;
         LightSkull.manager.get("audio/sounds/stomp.wav", Sound.class).play();
     }

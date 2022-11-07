@@ -1,5 +1,6 @@
 package com.virtualepoch.game.Sprites.Enemies;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -25,8 +26,6 @@ public class Turtle extends Enemy {
     private float stateTime;
     private TextureRegion injured;
     private Animation<TextureRegion> walkAnimation;
-    private Array<TextureRegion> frames;
-    private float deadRotationDegrees;
     private boolean destroyed;
 
     public Turtle(PlayScreen screen, float x, float y) {
@@ -38,16 +37,16 @@ public class Turtle extends Enemy {
 
         injured = new TextureRegion(screen.getAtlas().findRegion("monster_crawl"),0,0,90,59);
 
-        frames = new Array<TextureRegion>();
+        Array<TextureRegion> frames = new Array<>();
         for(int i = 0; i < 11; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("monster_crawl"),i * 90,0,90,59));
         walkAnimation = new Animation<TextureRegion>(0.07f, frames);
+        frames.clear();
 
         currentState = previousState = State.WALKING;
-        deadRotationDegrees = 0;
 
         // VVV === THIS IS THE SIZE OF THE SPRITE RENDERED ON THE PLAYSCREEN
-        setBounds(getX(),getY(),80 / LightSkull.PPM, 60 / LightSkull.PPM);
+        setBounds(getX(),getY(),80 / LightSkull.PPM, 80 / LightSkull.PPM);
     }
 
     @Override
@@ -59,16 +58,13 @@ public class Turtle extends Enemy {
 
         FixtureDef fdef = new FixtureDef();
 
-//        CircleShape shape = new CircleShape();
-//        shape.setRadius(30 / LightSkull.PPM);
-
         PolygonShape shape = new PolygonShape();
 
         fdef.shape = shape;
         fdef.filter.categoryBits = LightSkull.ENEMY_BIT;
-        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.PLAYER_BIT;
+        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.OBJECT_BIT | LightSkull.BRICK_BIT | LightSkull.COIN_BIT | LightSkull.PLAYER_BIT  | LightSkull.ENEMY_BIT | LightSkull.PROJECTILE_BIT;
 
-        shape.setAsBox(30 / LightSkull.PPM, 23 / LightSkull.PPM);
+        shape.setAsBox(30 / LightSkull.PPM, 28 / LightSkull.PPM);
         b2body.createFixture(fdef).setUserData(this);
 
         //Create the Head here:
@@ -87,7 +83,7 @@ public class Turtle extends Enemy {
     }
 
     public void draw(Batch batch){
-        if(!destroyed || stateTime < 1)
+        if(!destroyed || stateTime < 0)
             super.draw(batch);
     }
 
@@ -143,26 +139,28 @@ public class Turtle extends Enemy {
         }
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
 
-        if(currentState == State.DEAD){
-            deadRotationDegrees += 3;
-            rotate(deadRotationDegrees);
-            if(stateTime > 5 && !destroyed){
+        if(currentState == State.DEAD && stateTime > 0 && !destroyed){ // NUMBER ON THIS LINE CONTROLS HOW LONG TURTLE IS ON SCREEN FOR AFTER DIEING
                 world.destroyBody(b2body);
                 destroyed = true;
-            }
         }
         else
             b2body.setLinearVelocity(velocity);
     }
 
+//    @Override
+//    public void hitByLaser(Player player) {
+//        if(currentState != State.INJURED_STANDING) {
+//            currentState = State.INJURED_STANDING;
+//            velocity.x = 0;
+//        } else {
+//            kick(player.getX() <= this.getX() ? KICK_RIGHT_SPEED : KICK_LEFT_SPEED);
+//        }
+//    }
+
     @Override
-    public void hitOnHead(Player player) {
-        if(currentState != State.INJURED_STANDING) {
-            currentState = State.INJURED_STANDING;
-            velocity.x = 0;
-        } else {
-            kick(player.getX() <= this.getX() ? KICK_RIGHT_SPEED : KICK_LEFT_SPEED);
-        }
+    public void hitByLaser(Player player) {
+        killed();
+        LightSkull.manager.get("audio/sounds/stomp.wav", Sound.class).play();
     }
 
     public void kick(int speed){
@@ -177,7 +175,7 @@ public class Turtle extends Enemy {
     public void killed(){
         currentState = State.DEAD;
         Filter filter = new Filter();
-        filter.maskBits = LightSkull.NOTHING_BIT;
+        filter.maskBits = LightSkull.GROUND_BIT;
 
         for(Fixture fixture : b2body.getFixtureList())
             fixture.setFilterData(filter);

@@ -12,15 +12,12 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
 import com.virtualepoch.game.LightSkull;
 import com.virtualepoch.game.Screens.PlayScreen;
 import com.virtualepoch.game.Sprites.Enemies.Enemy;
 import com.virtualepoch.game.Sprites.Enemies.Turtle;
-
-import java.awt.Event;
 
 
 public class Player extends Sprite {
@@ -58,8 +55,6 @@ public class Player extends Sprite {
 
     private int lightskullRunWidth;
     private int lightskullRunHeight;
-    
-    public float firstY;
 
     public Player(PlayScreen screen){
 
@@ -222,10 +217,7 @@ public class Player extends Sprite {
     }
 
     public void hit(Enemy enemy) {
-        if (enemy instanceof Turtle && ((Turtle) enemy).getCurrentState() == Turtle.State.INJURED_STANDING) {
-            ((Turtle) enemy).kick(this.getX() <= enemy.getX() ? Turtle.KICK_RIGHT_SPEED : Turtle.KICK_LEFT_SPEED);
-        }
-        else if (playerIsBig) {
+        if (playerIsBig) {
                 playerIsBig = false;
                 timeToRedefinePlayer = true;
                 setBounds(getX(), getY(), getWidth(), getHeight() - 10 / LightSkull.PPM);
@@ -270,10 +262,10 @@ public class Player extends Sprite {
         PolygonShape shape = new PolygonShape();
         //////////////////////////////////////////
         fdef.filter.categoryBits = LightSkull.PLAYER_BIT;
-        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.ENEMY_HEAD_BIT | LightSkull.ITEM_BIT;
+        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.ENEMY_HEAD_BIT;
 
         fdef.shape = shape;
-        shape.setAsBox(20 / LightSkull.PPM, 30 / LightSkull.PPM);
+        shape.setAsBox(15 / LightSkull.PPM, 30 / LightSkull.PPM);
         b2body.createFixture(fdef).setUserData(this);
 
         // !!! 'setBounds' is the method that determines Player sprite size on screen
@@ -301,7 +293,7 @@ public class Player extends Sprite {
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
         fdef.filter.categoryBits = LightSkull.PLAYER_BIT;
-        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.ENEMY_HEAD_BIT | LightSkull.ITEM_BIT;
+        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.ENEMY_HEAD_BIT | LightSkull.PROJECTILE_BIT;
 
         fdef.shape = shape;
         shape.setAsBox(30 / LightSkull.PPM, 40 / LightSkull.PPM);
@@ -342,7 +334,7 @@ public class Player extends Sprite {
         PolygonShape shape = new PolygonShape();
         //////////////////////////////////////////
         fdef.filter.categoryBits = LightSkull.PLAYER_BIT;
-        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.ENEMY_HEAD_BIT | LightSkull.ITEM_BIT;
+        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.COIN_BIT | LightSkull.BRICK_BIT | LightSkull.ENEMY_BIT | LightSkull.OBJECT_BIT | LightSkull.ENEMY_HEAD_BIT | LightSkull.PROJECTILE_BIT;
 
         fdef.shape = shape;
         shape.setAsBox(20 / LightSkull.PPM, 30 / LightSkull.PPM);

@@ -1,47 +1,47 @@
 
 lightskull_sprites.png
-size: 2048, 64
+size: 2048, 128
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
+fireball
+  rotate: false
+  xy: 994, 87
+  size: 328, 32
+  orig: 328, 32
+  offset: 0, 0
+  index: -1
 lightskull_run
   rotate: false
-  xy: 1436, 11
+  xy: 444, 7
   size: 265, 51
   orig: 265, 51
   offset: 0, 0
   index: -1
 lightskull_stand
   rotate: false
-  xy: 1703, 6
+  xy: 711, 2
   size: 90, 56
   orig: 90, 56
   offset: 0, 0
   index: -1
 monster_crawl
   rotate: false
-  xy: 2, 3
+  xy: 2, 60
   size: 990, 59
   orig: 990, 59
   offset: 0, 0
   index: 59
-shroom
-  rotate: false
-  xy: 994, 2
-  size: 18, 18
-  orig: 18, 18
-  offset: 0, 0
-  index: -1
 skull_fly
   rotate: false
-  xy: 994, 22
+  xy: 2, 18
   size: 440, 40
   orig: 440, 40
   offset: 0, 0
   index: 40
 spider_dead
   rotate: false
-  xy: 1795, 49
+  xy: 994, 72
   size: 34, 13
   orig: 34, 13
   offset: 0, 0

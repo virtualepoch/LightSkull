@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="240" height="21" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="266">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="240" height="21" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="268">
  <tileset firstgid="1" source="level1_1_tileset.tsx"/>
  <layer id="1" name="Background Layer" width="240" height="21">
   <data encoding="base64" compression="zlib">
@@ -13,7 +13,7 @@
  </layer>
  <layer id="10" name="Graphic Layer 2" width="240" height="21">
   <data encoding="base64" compression="zlib">
-   eJzt2lsKgkAYhuG5EqRWkMup9r+GSe182EKfhOSFB0Ib/Yf3ge8qrSF6qYv8xgEwKM2c8/QLmES/gF30C9hFv4Bd9AvYRb+AXfQbjk+cO2i5VmildtRO2lm7aFftpt21h/bUXknYe8e8VmzvRah7Rz135P36QJ9JYA6x9wvErO636Hh8lQU7SqfqDOsFnANYGgvfv/QLtKNfwC76Beyy0C+AdkvuN+U7F+j1S7/VtSF7D90vv9NhDf1+0S+safa41XbavufaOfodOtdU6BfWNHvM3ed/HGXPtf/ot+s5636HzjUV+gUAhPIG05+5VQ==
+   eJzt2kkKwkAARNFeBURPoMdR73+GGOfxClYQMYsMSEIn1fwHtTLRRvzownwZABiarULI6RewRL+AL/oFfNEv4It+AV/0C/ii33jyLISdVmh77aAdtZN21i7aVbtpd+2hPbVXFvfePq+V2nsR695ez514v3mkzyQwhtT7BVL27Xff8Ph8Fe0ojcozLCZwDmBqHL5/6ReoR7+AL/oFfDn0C6Ae/QK+/um3vDbl3vmdDjf0+0O/cFPtca1ttG3LtWP023WuodAv3FR7LMLnfxyHlmvH6LfrXEOhXwBALG/b3bem
   </data>
  </layer>
  <layer id="11" name="Graphic Layer 3" width="240" height="21">
@@ -63,18 +63,18 @@
   <object id="190" x="1856" y="289" width="16" height="16"/>
   <object id="235" x="816" y="288" width="16" height="16"/>
   <object id="214" x="2896" y="288" width="16" height="16"/>
-  <object id="262" x="176" y="256" width="32" height="64"/>
   <object id="264" x="656" y="160" width="32" height="64"/>
   <object id="69" x="1072" y="256" width="32" height="64"/>
- </objectgroup>
- <objectgroup id="4" name="Pipes">
-  <object id="66" x="0" y="0" width="16" height="320"/>
+  <object id="267" x="176" y="256" width="32" height="64"/>
+  <object id="250" x="1568" y="304" width="16" height="16"/>
+  <object id="251" x="1872" y="304" width="16" height="16"/>
   <object id="41" x="2608" y="304" width="16" height="16"/>
   <object id="252" x="2912" y="304" width="16" height="16"/>
   <object id="223" x="3648" y="304" width="16" height="16"/>
   <object id="209" x="3824" y="0" width="15.5" height="112.5"/>
-  <object id="250" x="1568" y="304" width="16" height="16"/>
-  <object id="251" x="1872" y="304" width="16" height="16"/>
+  <object id="66" x="0" y="0" width="16" height="320"/>
+ </objectgroup>
+ <objectgroup id="4" name="Objects">
   <object id="247" x="470.5" y="388" height="1"/>
  </objectgroup>
  <objectgroup id="5" name="Coins">
