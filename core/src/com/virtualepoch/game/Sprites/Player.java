@@ -17,7 +17,6 @@ import com.badlogic.gdx.utils.Array;
 import com.virtualepoch.game.LightSkull;
 import com.virtualepoch.game.Screens.PlayScreen;
 import com.virtualepoch.game.Sprites.Enemies.Enemy;
-import com.virtualepoch.game.Sprites.Enemies.Turtle;
 
 
 public class Player extends Sprite {
@@ -41,7 +40,7 @@ public class Player extends Sprite {
     private Animation<TextureRegion> bigPlayerJump;
     private Animation<TextureRegion> bigPlayerRun;
 
-    private float stateTimer;
+    private float stateTime;
     private boolean movingRight;
     public boolean movingUp;
     public boolean movingDown;
@@ -50,11 +49,9 @@ public class Player extends Sprite {
     private boolean timeToDefineBigPlayer;
     private boolean timeToRedefinePlayer;
     private boolean playerIsDead;
-    
-    public boolean falling;
 
-    private int lightskullRunWidth;
-    private int lightskullRunHeight;
+    private int lightSkullRunWidth;
+    private int lightSkullRunHeight;
 
     public Player(PlayScreen screen){
 
@@ -62,12 +59,12 @@ public class Player extends Sprite {
         this.world = screen.getWorld();
         currentState = State.STANDING;
         previousState = State.STANDING;
-        stateTimer = 0;
+        stateTime = 0;
         movingRight = true;
         movingUp = false;
         movingDown = false;
-        lightskullRunWidth = 53;
-        lightskullRunHeight = 51;
+        lightSkullRunWidth = 53;
+        lightSkullRunHeight = 51;
 
 //////////////////////////////////////// VVV === SPRITE SHEET SECTION === VVV ////////////////////////////////////////
         Array<TextureRegion> frames = new Array<>();
@@ -76,19 +73,19 @@ public class Player extends Sprite {
         playerStand = new Animation(0.8f, frames);
         frames.clear();
         for(int i = 0; i < 5; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightskullRunWidth, 0, lightskullRunWidth, lightskullRunHeight));
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightSkullRunWidth, 0, lightSkullRunWidth, lightSkullRunHeight));
         playerMoveRightLeft = new Animation(0.1f, frames);
         frames.clear();
         for(int i = 0; i < 5; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightskullRunWidth, 0, lightskullRunWidth, lightskullRunHeight));
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightSkullRunWidth, 0, lightSkullRunWidth, lightSkullRunHeight));
         playerMoveUp = new Animation(0.1f, frames);
         frames.clear();
         for(int i = 0; i < 5; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightskullRunWidth, 0, lightskullRunWidth, lightskullRunHeight));
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightSkullRunWidth, 0, lightSkullRunWidth, lightSkullRunHeight));
         playerMoveDown = new Animation(0.1f, frames);
         frames.clear();
         for(int i = 0; i < 5; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightskullRunWidth, 0, lightskullRunWidth, lightskullRunHeight));
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightSkullRunWidth, 0, lightSkullRunWidth, lightSkullRunHeight));
         playerJump = new Animation(0.1f, frames);
         frames.clear();
         for(int i = 0; i < 2; i++)
@@ -96,10 +93,10 @@ public class Player extends Sprite {
         playerDead = new Animation(0.4f, frames);
         frames.clear();
 
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), 0, 0, lightskullRunWidth, lightskullRunHeight));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), 0, 0, lightskullRunWidth, lightskullRunHeight));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), 0, 0, lightskullRunWidth, lightskullRunHeight));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), 0, 0, lightskullRunWidth, lightskullRunHeight));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), 0, 0, lightSkullRunWidth, lightSkullRunHeight));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), 0, 0, lightSkullRunWidth, lightSkullRunHeight));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), 0, 0, lightSkullRunWidth, lightSkullRunHeight));
+        frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), 0, 0, lightSkullRunWidth, lightSkullRunHeight));
         growPlayer = new Animation(0.2f, frames);
         frames.clear();
 
@@ -110,11 +107,11 @@ public class Player extends Sprite {
         frames.clear();
 
         for(int i = 0; i < 5; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"),i * lightskullRunWidth, 0, lightskullRunWidth, lightskullRunHeight));
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"),i * lightSkullRunWidth, 0, lightSkullRunWidth, lightSkullRunHeight));
         bigPlayerRun = new Animation(0.1f, frames);
         frames.clear();
         for(int i = 0; i < 5; i++)
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightskullRunWidth, 0, lightskullRunWidth, lightskullRunHeight));
+            frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightSkullRunWidth, 0, lightSkullRunWidth, lightSkullRunHeight));
         bigPlayerJump = new Animation(0.1f, frames);
         frames.clear();
 
@@ -147,29 +144,29 @@ public class Player extends Sprite {
         TextureRegion region;
         switch(currentState){
             case DEAD:
-                region = (TextureRegion) playerDead.getKeyFrame(stateTimer);
+                region = (TextureRegion) playerDead.getKeyFrame(stateTime);
                 break;
             case GROWING:
-                region = (TextureRegion) growPlayer.getKeyFrame(stateTimer);
-                if(growPlayer.isAnimationFinished(stateTimer))
+                region = (TextureRegion) growPlayer.getKeyFrame(stateTime);
+                if(growPlayer.isAnimationFinished(stateTime))
                     runGrowAnimation = false;
                 break;
             case JUMPING:
-                region = playerIsBig ? (TextureRegion) bigPlayerJump.getKeyFrame(stateTimer, true) : (TextureRegion) playerJump.getKeyFrame(stateTimer,true);
+                region = playerIsBig ? (TextureRegion) bigPlayerJump.getKeyFrame(stateTime, true) : (TextureRegion) playerJump.getKeyFrame(stateTime,true);
                 break;
             case MOVING_RIGHT_LEFT:
-                region = playerIsBig ? (TextureRegion) bigPlayerRun.getKeyFrame(stateTimer, true) : (TextureRegion) playerMoveRightLeft.getKeyFrame(stateTimer, true);
+                region = playerIsBig ? (TextureRegion) bigPlayerRun.getKeyFrame(stateTime, true) : (TextureRegion) playerMoveRightLeft.getKeyFrame(stateTime, true);
                 break;
             case MOVING_UP:
-                region = (TextureRegion) playerMoveUp.getKeyFrame(stateTimer,true);
+                region = (TextureRegion) playerMoveUp.getKeyFrame(stateTime,true);
                 break;
             case MOVING_DOWN:
-                region = (TextureRegion) playerMoveDown.getKeyFrame(stateTimer,true);
+                region = (TextureRegion) playerMoveDown.getKeyFrame(stateTime,true);
                 break;
             case FALLING:
             case STANDING:
             default:
-                region = playerIsBig ? (TextureRegion) bigPlayerStand.getKeyFrame(stateTimer,true) : (TextureRegion) playerStand.getKeyFrame(stateTimer,true);
+                region = playerIsBig ? (TextureRegion) bigPlayerStand.getKeyFrame(stateTime,true) : (TextureRegion) playerStand.getKeyFrame(stateTime,true);
                 break;
         }
         if((b2body.getLinearVelocity().x < 0 || !movingRight) && !region.isFlipX()){
@@ -182,7 +179,7 @@ public class Player extends Sprite {
 
         // if the current state is the same as the previous state increase the state timer.
         // otherwise the state has changed and we need to reset timer.
-        stateTimer = currentState == previousState ? stateTimer + dt : 0;
+        stateTime = currentState == previousState ? stateTime + dt : 0;
         // update previous state
         previousState = currentState;
         // return our final adjusted frame
@@ -242,8 +239,8 @@ public class Player extends Sprite {
         return playerIsDead;
     }
 
-    public float getStateTimer(){
-        return stateTimer;
+    public float getStateTime(){
+        return stateTime;
     }
 
     public void definePlayer(){

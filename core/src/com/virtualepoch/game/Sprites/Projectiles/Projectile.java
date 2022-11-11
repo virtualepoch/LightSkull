@@ -22,7 +22,6 @@ public abstract class Projectile extends Sprite {
     protected Player player;
 
     protected Vector2 velocity;
-    protected Vector2 velocityNeg;
 
     public enum State { MOVING_RIGHT_LEFT, IDLE }
     public State currentState;
@@ -39,7 +38,7 @@ public abstract class Projectile extends Sprite {
         previousState = State.IDLE;
 
         setPosition(x,y);
-//        setBounds(getX(),getY(),30/ LightSkull.PPM,10/ LightSkull.PPM);
+        setBounds(getX(),getY(),40/ LightSkull.PPM,8/ LightSkull.PPM);
         defineProjectile();
         toDestroy = false;
         destroyed = false;

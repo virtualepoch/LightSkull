@@ -18,8 +18,6 @@ public class SmallLaser extends Projectile {
 
     private float stateTime;
     private Animation<TextureRegion> animation;
-    private boolean setToDestroy;
-    private boolean destroyed;
 
     public SmallLaser(PlayScreen screen, float x, float y) {
         super(screen, x, y);
@@ -33,10 +31,7 @@ public class SmallLaser extends Projectile {
         frames.clear();
 
         stateTime = 0;
-        setToDestroy = false;
-        destroyed = false;
         velocity = new Vector2(5f, 0);
-        velocityNeg = new Vector2(-3f, 0);
     }
 
     @Override
@@ -50,11 +45,11 @@ public class SmallLaser extends Projectile {
         CircleShape shape = new CircleShape();
         shape.setRadius(5 / LightSkull.PPM);
         fdef.filter.categoryBits = LightSkull.PROJECTILE_BIT;
-        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.OBJECT_BIT | LightSkull.BRICK_BIT | LightSkull.COIN_BIT | LightSkull.ENEMY_BIT;
+        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.OBJECT_BIT | LightSkull.BRICK_BIT | LightSkull.COIN_BIT | LightSkull.ENEMY_BIT | LightSkull.PROJECTILE_BIT | LightSkull.PLAYER_BIT;
 
         fdef.shape = shape;
         body.createFixture(fdef).setUserData(this);
-        setBounds(getX(), getY(), 40 / LightSkull.PPM, 10 / LightSkull.PPM);
+//        setBounds(getX(), getY(), 60 / LightSkull.PPM, 10 / LightSkull.PPM);
     }
 
     public TextureRegion getFrame(float dt){
@@ -102,10 +97,9 @@ public class SmallLaser extends Projectile {
     public void update(float dt) {
         super.update(dt);
         stateTime +=dt;
-        if(setToDestroy && !destroyed){
+        if(toDestroy && !destroyed){
             world.destroyBody(body);
             destroyed = true;
-            setRegion(new TextureRegion(screen.getAtlas().findRegion("spider_dead" ), 0, 0, 17, 13));
             stateTime = 0;
         }
         else if (!destroyed){

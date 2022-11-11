@@ -26,10 +26,9 @@ public class Controller implements Disposable {
     int dPadBtnSize = 60;
     int btnPadding = 0;
 
-
-//    public int makeTransparent(Image image){
-//      image.setColor(355,355,355,0.5f);
-//    }    NEED TO FIGURE THIS OUT TO CLEAN THINGS UP
+    public void makeTransparent(Image image){
+        image.setColor(355, 355, 355, 0.5f);
+    }
 
     public Controller(){
         cam = new OrthographicCamera();
@@ -40,7 +39,7 @@ public class Controller implements Disposable {
         // IMAGE AND INPUT LISTENER FOR THE UP-BUTTON
         Image upBtn = new Image(new Texture("controller_btns/up_btn.png"));
         upBtn.setSize(dPadBtnSize, dPadBtnSize);
-        upBtn.setColor(355,355,355,0.5f);
+        makeTransparent(upBtn);
         upBtn.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -58,7 +57,7 @@ public class Controller implements Disposable {
         // IMAGE AND INPUT LISTENER FOR THE LEFT-BUTTON
         Image leftBtn = new Image(new Texture("controller_btns/left_btn.png"));
         leftBtn.setSize(dPadBtnSize, dPadBtnSize);
-        leftBtn.setColor(355,355,355,0.5f);
+        makeTransparent(leftBtn);
         leftBtn.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -76,7 +75,7 @@ public class Controller implements Disposable {
         // IMAGE AND INPUT LISTENER FOR THE RIGHT-BUTTON
         Image rightBtn = new Image(new Texture("controller_btns/right_btn.png"));
         rightBtn.setSize(dPadBtnSize, dPadBtnSize);
-        rightBtn.setColor(355,355,355,0.5f);
+        makeTransparent(rightBtn);
         rightBtn.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -94,7 +93,7 @@ public class Controller implements Disposable {
         // IMAGE AND INPUT LISTENER FOR THE DOWN-BUTTON
         Image downBtn = new Image(new Texture("controller_btns/down_btn.png"));
         downBtn.setSize(dPadBtnSize, dPadBtnSize);
-        downBtn.setColor(355,355,355,0.5f);
+        makeTransparent(downBtn);
         downBtn.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -112,7 +111,7 @@ public class Controller implements Disposable {
         // A-BUTTON
         Image aBtn = new Image(new Texture("controller_btns/a_btn.png"));
         aBtn.setSize(50, 50);
-        aBtn.setColor(355,355,355,0.5f);
+        makeTransparent(aBtn);
         aBtn.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -132,7 +131,7 @@ public class Controller implements Disposable {
         // B-BUTTON
         Image bBtn = new Image(new Texture("controller_btns/b_btn.png"));
         bBtn.setSize(50, 50);
-        bBtn.setColor(355,355,355,0.5f);
+        makeTransparent(bBtn);
         bBtn.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -174,9 +173,9 @@ public class Controller implements Disposable {
         table2.setFillParent(true);
 //        table2.setDebug(true);
         table2.right().bottom();
-        table2.add(aBtn).size(aBtn.getWidth(), aBtn.getHeight()).pad(5);
+        table2.add(aBtn).size(aBtn.getWidth(), aBtn.getHeight()).padRight(20).padBottom(10);
         table2.row();
-        table2.add(bBtn).size(bBtn.getWidth(), bBtn.getHeight()).pad(5);
+        table2.add(bBtn).size(bBtn.getWidth(), bBtn.getHeight()).padRight(20).padBottom(10);
 
         stage.addActor(table1Row1);
         stage.addActor(table1Row3);
@@ -221,9 +220,4 @@ public class Controller implements Disposable {
     public void dispose() {
         stage.dispose();
     }
-
-    public void resize(int width, int height){
-        viewport.update(width,height);
-    }
-
 }

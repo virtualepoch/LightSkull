@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.virtualepoch.game.LightSkull;
+import com.virtualepoch.game.Scenes.AnimatedBackdrop;
 import com.virtualepoch.game.Scenes.Controller;
 import com.virtualepoch.game.Scenes.Hud;
 import com.virtualepoch.game.Sprites.Enemies.Enemy;
@@ -44,6 +45,8 @@ public class PlayScreen implements Screen {
     private Hud hud;
     private Controller controller;
 
+    private AnimatedBackdrop backdrop;
+
     //Tiled map variables
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -60,7 +63,6 @@ public class PlayScreen implements Screen {
 
     private Array<Projectile> projectiles;
     private LinkedBlockingQueue<ProjectileDef> projectilesToSpawn;
-    private boolean projectileFired;
 
     public PlayScreen(LightSkull game) {
         atlas = new TextureAtlas(("lightskull_sprites.atlas"));
@@ -73,6 +75,8 @@ public class PlayScreen implements Screen {
         //Create our game HUD for scores/timers/level info
         hud = new Hud(game.batch);
         controller = new Controller();
+
+        backdrop = new AnimatedBackdrop();
 
         //Load our map and setup our map renderer
         mapLoader = new TmxMapLoader();
@@ -103,15 +107,13 @@ public class PlayScreen implements Screen {
 
         projectiles = new Array<Projectile>();
         projectilesToSpawn = new LinkedBlockingQueue<ProjectileDef>();
-        projectileFired = false;
     }
 
     public void spawnProjectile(ProjectileDef idef){
         projectilesToSpawn.add(idef);
     }
 
-    public void handleSpawingProjectiles(){
-
+    public void handleSpawningProjectiles(){
         if(!projectilesToSpawn.isEmpty()){
             ProjectileDef idef = projectilesToSpawn.poll();
             if(idef.type == SmallLaser.class){
@@ -158,23 +160,15 @@ public class PlayScreen implements Screen {
 
         ////////////////// INPUT FOR JUMPING /////////////////////////////////////////////////////////////////////////////////////////////////////
         if((Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || (controller.isAPressed())) && (player.getState() == Player.State.STANDING || player.getState() == Player.State.MOVING_RIGHT_LEFT)){
-            if((controller.getTouchUpTime() - controller.getTouchDownTime()) < 100)
+//            if((controller.getTouchUpTime() - controller.getTouchDownTime()) < 100)
+//                player.b2body.applyLinearImpulse(new Vector2(0, 4f),player.b2body.getWorldCenter(), true);
+//            if((controller.getTouchUpTime() - controller.getTouchDownTime()) > 100)
                 player.b2body.applyLinearImpulse(new Vector2(0, 4f),player.b2body.getWorldCenter(), true);
-            if((controller.getTouchUpTime() - controller.getTouchDownTime()) > 100)
-                player.b2body.applyLinearImpulse(new Vector2(0, 8f),player.b2body.getWorldCenter(), true);
 
         }
-
-        ///////////////// KEYBOARD INPUT FOR FIRING PROJECTILE ///////////////////////////////////////////////////////////////////////
-        if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-            if(player.isFlipX()){
-                spawnProjectile(new ProjectileDef(new Vector2(player.b2body.getPosition().x - 20 / PPM, player.b2body.getPosition().y + 25 / LightSkull.PPM), SmallLaser.class));
-            }else{
-                spawnProjectile(new ProjectileDef(new Vector2(player.b2body.getPosition().x + 20/ PPM, player.b2body.getPosition().y + 25/LightSkull.PPM), SmallLaser.class));
-            }
-        }
-        ///////////////// CONTROLLER INPUT FOR FIRING PROJECTILE ///////////////////////////////////////////////////////////////////////
-        if(controller.isBPressed()) {
+        ///////////////// INPUT FOR FIRING PROJECTILE ///////////////////////////////////////////////////////////////////////
+        // !!DELETED THE FOLLOWING FROM CONDITIONAL BELOW.. APPARENTLY NOT NEEDED!!  && (player.getState() == Player.State.STANDING || player.getState() == Player.State.MOVING_RIGHT_LEFT || player.getState() == Player.State.JUMPING)
+        if(Gdx.input.isKeyJustPressed(Input.Keys.P) || controller.isBPressed()) {
             if(player.isFlipX()){
                 spawnProjectile(new ProjectileDef(new Vector2(player.b2body.getPosition().x - 20 / PPM, player.b2body.getPosition().y + 25 / LightSkull.PPM), SmallLaser.class));
                 controller.bHasBeenPressed();
@@ -188,7 +182,7 @@ public class PlayScreen implements Screen {
     public void update(float dt){
         //handle user input first
         handleInput(dt);
-        handleSpawingProjectiles();
+        handleSpawningProjectiles();
 
         world.step(1/60f, 6, 2);
 
@@ -222,11 +216,14 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //render the backdrop image or sprite
+        backdrop.stage.draw();
+
         //render our game map
         renderer.render();
 
         //render our Box2DDebugLines
-        b2dr.render(world, gamecam.combined);
+//        b2dr.render(world, gamecam.combined);
 
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
@@ -244,6 +241,7 @@ public class PlayScreen implements Screen {
         //Set our batch to now draw what the Hud camera sees.
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!! IS IT REQUIRED HERE TO DO THE SAME AS ABOVE FOR THE CONTROLLER BELOW ????????????????????
         controller.stage.draw();
 
         if(gameOver()){
@@ -252,7 +250,7 @@ public class PlayScreen implements Screen {
     }
 
     public boolean gameOver(){
-        if(player.currentState == Player.State.DEAD && player.getStateTimer() > 3){
+        if(player.currentState == Player.State.DEAD && player.getStateTime() > 3){
             return true;
         }
         return false;
@@ -291,7 +289,7 @@ public class PlayScreen implements Screen {
         map.dispose();
         renderer.dispose();
         world.dispose();
-        b2dr.dispose();
+//        b2dr.dispose();
         hud.dispose();
         controller.dispose();
     }
