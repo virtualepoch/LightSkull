@@ -120,7 +120,8 @@ public class PlayScreen implements Screen {
                 projectiles.add(new SmallLaser(this, idef.position.x, idef.position.y));
             }
             for(Projectile projectile : projectiles){
-                if(player.isFlipX() && !controller.bHasBeenPressed() && (projectile.getState() != Projectile.State.MOVING_RIGHT_LEFT)){
+                // !!REMOVED THE FOLLOWING FROM BELOW AFTER 'player.isFlipX()' !! -- && !controller.bHasBeenPressed()
+                if(player.isFlipX() && (projectile.getState() != Projectile.State.MOVING_RIGHT_LEFT)){
                     projectile.reverseVelocity();
                 }
             }
@@ -250,10 +251,7 @@ public class PlayScreen implements Screen {
     }
 
     public boolean gameOver(){
-        if(player.currentState == Player.State.DEAD && player.getStateTime() > 3){
-            return true;
-        }
-        return false;
+        return player.currentState == Player.State.DEAD && player.getStateTime() > 3;
     }
 
     @Override
