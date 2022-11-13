@@ -1,12 +1,7 @@
 package com.virtualepoch.game.Sprites.Projectiles;
 
-import static com.virtualepoch.game.Sprites.Projectiles.Projectile.State.IDLE;
-import static com.virtualepoch.game.Sprites.Projectiles.Projectile.State.MOVING_RIGHT_LEFT;
-
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
@@ -23,9 +18,9 @@ public abstract class Projectile extends Sprite {
 
     protected Vector2 velocity;
 
-    public enum State { MOVING_RIGHT_LEFT, IDLE }
-    public State currentState;
-    public State previousState;
+//    public enum State { MOVING_RIGHT_LEFT, IDLE }
+//    public State currentState;
+//    public State previousState;
 
     protected boolean toDestroy;
     protected boolean destroyed;
@@ -34,8 +29,8 @@ public abstract class Projectile extends Sprite {
     public Projectile(PlayScreen screen, float x, float y){
         this.screen = screen;
         this.world = screen.getWorld();
-        currentState = State.IDLE;
-        previousState = State.IDLE;
+//        currentState = State.IDLE;
+//        previousState = State.IDLE;
 
         setPosition(x,y);
         setBounds(getX(),getY(),40/ LightSkull.PPM,8/ LightSkull.PPM);
@@ -47,10 +42,8 @@ public abstract class Projectile extends Sprite {
 
     public abstract void defineProjectile();
 
-    public State getState(){
-        if(body.getLinearVelocity().x != 0)
-            return MOVING_RIGHT_LEFT;
-        else return IDLE;
+    public boolean moving(){
+        return body.getLinearVelocity().x != 0;
     }
 
     public abstract void hitEnemy(Enemy enemy);
@@ -63,11 +56,12 @@ public abstract class Projectile extends Sprite {
     }
 
     public void destroy(){
+        resetVelocity();
         toDestroy = true;
     }
 
     public void reverseVelocity(){
-            velocity.x = -velocity.x;
+        velocity.x = -velocity.x;
     }
 
     public void resetVelocity(){

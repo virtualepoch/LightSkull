@@ -23,7 +23,8 @@ public class Controller implements Disposable {
     long touchDownTime;
     long touchUpTime;
 
-    int dPadBtnSize = 60;
+    int moveBtnSize = 60;
+    int actionBtnSize = 60;
     int btnPadding = 0;
 
     public void makeTransparent(Image image){
@@ -38,7 +39,7 @@ public class Controller implements Disposable {
 
         // IMAGE AND INPUT LISTENER FOR THE UP-BUTTON
         Image upBtn = new Image(new Texture("controller_btns/up_btn.png"));
-        upBtn.setSize(dPadBtnSize, dPadBtnSize);
+        upBtn.setSize(moveBtnSize, moveBtnSize);
         makeTransparent(upBtn);
         upBtn.addListener(new InputListener(){
             @Override
@@ -56,7 +57,7 @@ public class Controller implements Disposable {
 
         // IMAGE AND INPUT LISTENER FOR THE LEFT-BUTTON
         Image leftBtn = new Image(new Texture("controller_btns/left_btn.png"));
-        leftBtn.setSize(dPadBtnSize, dPadBtnSize);
+        leftBtn.setSize(moveBtnSize, moveBtnSize);
         makeTransparent(leftBtn);
         leftBtn.addListener(new InputListener(){
             @Override
@@ -74,7 +75,7 @@ public class Controller implements Disposable {
 
         // IMAGE AND INPUT LISTENER FOR THE RIGHT-BUTTON
         Image rightBtn = new Image(new Texture("controller_btns/right_btn.png"));
-        rightBtn.setSize(dPadBtnSize, dPadBtnSize);
+        rightBtn.setSize(moveBtnSize, moveBtnSize);
         makeTransparent(rightBtn);
         rightBtn.addListener(new InputListener(){
             @Override
@@ -92,7 +93,7 @@ public class Controller implements Disposable {
 
         // IMAGE AND INPUT LISTENER FOR THE DOWN-BUTTON
         Image downBtn = new Image(new Texture("controller_btns/down_btn.png"));
-        downBtn.setSize(dPadBtnSize, dPadBtnSize);
+        downBtn.setSize(moveBtnSize, moveBtnSize);
         makeTransparent(downBtn);
         downBtn.addListener(new InputListener(){
             @Override
@@ -110,7 +111,7 @@ public class Controller implements Disposable {
 
         // A-BUTTON
         Image aBtn = new Image(new Texture("controller_btns/a_btn.png"));
-        aBtn.setSize(50, 50);
+        aBtn.setSize(actionBtnSize, actionBtnSize);
         makeTransparent(aBtn);
         aBtn.addListener(new InputListener(){
             @Override
@@ -130,7 +131,7 @@ public class Controller implements Disposable {
 
         // B-BUTTON
         Image bBtn = new Image(new Texture("controller_btns/b_btn.png"));
-        bBtn.setSize(50, 50);
+        bBtn.setSize(actionBtnSize, actionBtnSize);
         makeTransparent(bBtn);
         bBtn.addListener(new InputListener(){
             @Override
@@ -152,20 +153,20 @@ public class Controller implements Disposable {
         Table table1Row1 = new Table();
         table1Row1.setFillParent(true);
 //        table1Row1.setDebug(true);
-        table1Row1.left().bottom().padBottom(dPadBtnSize * 1.6f).padLeft(dPadBtnSize * 0.6f);
+        table1Row1.left().bottom().padBottom(moveBtnSize * 1.6f).padLeft(moveBtnSize * 0.6f);
         table1Row1.add(upBtn).size(upBtn.getWidth(), upBtn.getHeight());
         // ROW TWO
         Table table1Row2 = new Table();
         table1Row2.setFillParent(true);
 //        table1Row2.setDebug(true);
-        table1Row2.left().bottom().padBottom(dPadBtnSize * 0.8f);
-        table1Row2.add(leftBtn).size(leftBtn.getWidth(), leftBtn.getHeight()).padRight(dPadBtnSize * 0.2f);
+        table1Row2.left().bottom().padBottom(moveBtnSize * 0.8f);
+        table1Row2.add(leftBtn).size(leftBtn.getWidth(), leftBtn.getHeight()).padRight(moveBtnSize * 0.2f);
         table1Row2.add(rightBtn).size(rightBtn.getWidth(), rightBtn.getHeight());
         // ROW THREE
         Table table1Row3 = new Table();
         table1Row3.setFillParent(true);
 //        table1Row3.setDebug(true);
-        table1Row3.left().bottom().padLeft(dPadBtnSize * 0.6f);
+        table1Row3.left().bottom().padLeft(moveBtnSize * 0.6f);
         table1Row3.add(downBtn).size(downBtn.getWidth(),downBtn.getHeight());
 
         // TABLE FOR A & B BUTTONS ///////
@@ -173,13 +174,13 @@ public class Controller implements Disposable {
         table2.setFillParent(true);
 //        table2.setDebug(true);
         table2.right().bottom();
-        table2.add(aBtn).size(aBtn.getWidth(), aBtn.getHeight()).padRight(20).padBottom(10);
+        table2.add(aBtn).size(aBtn.getWidth(), aBtn.getHeight()).padRight(10);
         table2.row();
-        table2.add(bBtn).size(bBtn.getWidth(), bBtn.getHeight()).padRight(20).padBottom(10);
+        table2.add(bBtn).size(bBtn.getWidth(), bBtn.getHeight()).padRight(10).padBottom(10);
 
         stage.addActor(table1Row1);
         stage.addActor(table1Row3);
-        // VVV === ADDED THE 'ROW TWO' TABLE LAST HERE TO ENSURE IT IS ON TOP OF THE OTHER TABLES
+        // BLOW I ADDED THE 'ROW TWO' TABLE LAST HERE TO ENSURE IT IS ON TOP OF THE OTHER TABLES
         stage.addActor(table1Row2);
         stage.addActor(table2);
 

@@ -37,14 +37,14 @@ public class Goomba extends Enemy {
     public void update(float dt){
         stateTime +=dt;
         if(setToDestroy && !destroyed){
-            world.destroyBody(b2body);
+            world.destroyBody(body);
             destroyed = true;
             setRegion(new TextureRegion(screen.getAtlas().findRegion("spider_dead" ), 0, 0, 17, 13));
             stateTime = 0;
         }
         else if(!destroyed) {
-            b2body.setLinearVelocity(velocity);
-            setPosition(b2body.getPosition().x - getWidth() / 2 + 4 / LightSkull.PPM, b2body.getPosition().y - getHeight() / 2 + 3 / LightSkull.PPM);
+            body.setLinearVelocity(velocity);
+            setPosition(body.getPosition().x - getWidth() / 2 + 4 / LightSkull.PPM, body.getPosition().y - getHeight() / 2 + 3 / LightSkull.PPM);
             setRegion(walkAnimation.getKeyFrame(stateTime,true));
         }
     }
@@ -54,7 +54,7 @@ public class Goomba extends Enemy {
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
+        body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
@@ -63,7 +63,7 @@ public class Goomba extends Enemy {
         fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.OBJECT_BIT | LightSkull.BRICK_BIT | LightSkull.COIN_BIT | LightSkull.PLAYER_BIT  | LightSkull.ENEMY_BIT | LightSkull.PROJECTILE_BIT;
 
         fdef.shape = shape;
-        b2body.createFixture(fdef).setUserData(this);
+        body.createFixture(fdef).setUserData(this);
 
         //Create the Head here:
         PolygonShape head = new PolygonShape();
@@ -77,7 +77,7 @@ public class Goomba extends Enemy {
         fdef.shape = head;
         fdef.restitution = 0.5f;
         fdef.filter.categoryBits = LightSkull.ENEMY_HEAD_BIT;
-        b2body.createFixture(fdef).setUserData(this);
+        body.createFixture(fdef).setUserData(this);
     }
 
     public void draw(Batch batch){
@@ -86,7 +86,7 @@ public class Goomba extends Enemy {
     }
 
     public void onEnemyHit(Enemy enemy){
-        if(enemy instanceof Turtle && ((Turtle) enemy).currentState == Turtle.State.INJURED_KICKED)
+        if(enemy instanceof Turtle && ((Turtle) enemy).currentState == Turtle.State.INJURED)
             setToDestroy = true;
         else
             reverseVelocity(true,false);

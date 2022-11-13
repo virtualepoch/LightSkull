@@ -20,13 +20,11 @@ import com.virtualepoch.game.Sprites.Enemies.Enemy;
 
 
 public class Player extends Sprite {
-    public Vector2 velocity;
-
     public enum State { FALLING, JUMPING, STANDING, MOVING_RIGHT_LEFT, MOVING_UP, MOVING_DOWN, GROWING, DEAD };
     public State currentState;
     public State previousState;
     public World world;
-    public Body b2body;
+    public Body body;
 
     private Animation<TextureRegion> playerStand;
     private Animation<TextureRegion> playerMoveRightLeft;
@@ -126,9 +124,9 @@ public class Player extends Sprite {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // !!! THIS SETS THE POSITION OF THE SPRITE IMAGES ON THE BOX2D BODY CREATED !!! ////////////////////////////////////////////
         if(playerIsBig)
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+            setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         else
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+            setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         /// ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ ///////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         setRegion(getFrame(dt));
@@ -169,10 +167,10 @@ public class Player extends Sprite {
                 region = playerIsBig ? (TextureRegion) bigPlayerStand.getKeyFrame(stateTime,true) : (TextureRegion) playerStand.getKeyFrame(stateTime,true);
                 break;
         }
-        if((b2body.getLinearVelocity().x < 0 || !movingRight) && !region.isFlipX()){
+        if((body.getLinearVelocity().x < 0 || !movingRight) && !region.isFlipX()){
             region.flip(true, false);
             movingRight = false;
-        }else if ((b2body.getLinearVelocity().x > 0 || movingRight) && region.isFlipX()){
+        }else if ((body.getLinearVelocity().x > 0 || movingRight) && region.isFlipX()){
             region.flip(true, false);
             movingRight = true;
         }
@@ -191,11 +189,11 @@ public class Player extends Sprite {
             return State.DEAD;
         else if(runGrowAnimation)
             return State.GROWING;
-        else if(b2body.getLinearVelocity().y > 0 || (b2body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
+        else if(body.getLinearVelocity().y > 0 || (body.getLinearVelocity().y < 0 && previousState == State.JUMPING))
             return State.JUMPING;
-        else if(b2body.getLinearVelocity().y < 0)
+        else if(body.getLinearVelocity().y < 0)
             return State.FALLING;
-        else if(b2body.getLinearVelocity().x != 0)
+        else if(body.getLinearVelocity().x != 0)
             return State.MOVING_RIGHT_LEFT;
         else if(movingUp)
             return State.MOVING_UP;
@@ -228,9 +226,9 @@ public class Player extends Sprite {
                 playerIsDead = true;
                 Filter filter = new Filter();
                 filter.maskBits = LightSkull.NOTHING_BIT;
-                for (Fixture fixture : b2body.getFixtureList())
+                for (Fixture fixture : body.getFixtureList())
                     fixture.setFilterData(filter);
-                b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+                body.applyLinearImpulse(new Vector2(0, 4f), body.getWorldCenter(), true);
             }
 
     }
@@ -247,7 +245,7 @@ public class Player extends Sprite {
         BodyDef bdef = new BodyDef();
         bdef.position.set(100 / LightSkull.PPM, 300 / LightSkull.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
+        body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
 
@@ -263,7 +261,7 @@ public class Player extends Sprite {
 
         fdef.shape = shape;
         shape.setAsBox(15 / LightSkull.PPM, 30 / LightSkull.PPM);
-        b2body.createFixture(fdef).setUserData(this);
+        body.createFixture(fdef).setUserData(this);
 
         // !!! 'setBounds' is the method that determines Player sprite size on screen
         setBounds(0, 0, 42 / LightSkull.PPM, 62 / LightSkull.PPM);
@@ -275,17 +273,17 @@ public class Player extends Sprite {
         fdef.shape = head;
         fdef.isSensor = true;
 
-        b2body.createFixture(fdef).setUserData(this);
+        body.createFixture(fdef).setUserData(this);
     }
 
     public void defineBigPlayer(){
-        Vector2 currentPosition = b2body.getPosition();
-        world.destroyBody(b2body);
+        Vector2 currentPosition = body.getPosition();
+        world.destroyBody(body);
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(currentPosition.add(0,1 / LightSkull.PPM));
         bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
+        body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
@@ -294,7 +292,7 @@ public class Player extends Sprite {
 
         fdef.shape = shape;
         shape.setAsBox(30 / LightSkull.PPM, 40 / LightSkull.PPM);
-        b2body.createFixture(fdef).setUserData(this);
+        body.createFixture(fdef).setUserData(this);
 
         // !!! 'setBounds' is the method that determines Player sprite size on screen
         setBounds(0,0, 62 / LightSkull.PPM, 82 / LightSkull.PPM);
@@ -306,7 +304,7 @@ public class Player extends Sprite {
         fdef.shape = head;
         fdef.isSensor = true;
 
-        b2body.createFixture(fdef).setUserData(this);
+        body.createFixture(fdef).setUserData(this);
         timeToDefineBigPlayer = false;
     }
     public boolean isBig(){
@@ -314,12 +312,12 @@ public class Player extends Sprite {
     }
 
     public void redefinePlayer(){
-        Vector2 position = b2body.getPosition();
-        world.destroyBody(b2body);
+        Vector2 position = body.getPosition();
+        world.destroyBody(body);
         BodyDef bdef = new BodyDef();
         bdef.position.set(position);
         bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
+        body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
 
@@ -335,7 +333,7 @@ public class Player extends Sprite {
 
         fdef.shape = shape;
         shape.setAsBox(20 / LightSkull.PPM, 30 / LightSkull.PPM);
-        b2body.createFixture(fdef).setUserData(this);
+        body.createFixture(fdef).setUserData(this);
 
         // !!! 'setBounds' is the method that determines Player sprite size on screen
         setBounds(0, 0, 42 / LightSkull.PPM, 62 / LightSkull.PPM);
@@ -348,7 +346,7 @@ public class Player extends Sprite {
         fdef.shape = head;
         fdef.isSensor = true;
 
-        b2body.createFixture(fdef).setUserData(this);
+        body.createFixture(fdef).setUserData(this);
 
         timeToRedefinePlayer = false;
     }

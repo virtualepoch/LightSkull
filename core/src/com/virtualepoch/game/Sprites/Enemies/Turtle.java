@@ -6,21 +6,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
-import com.sun.org.apache.bcel.internal.generic.PUSH;
 import com.virtualepoch.game.LightSkull;
 import com.virtualepoch.game.Screens.PlayScreen;
 import com.virtualepoch.game.Sprites.Player;
 
 public class Turtle extends Enemy {
-    public static final int KICK_LEFT_SPEED = -2;
-    public static final int KICK_RIGHT_SPEED = 2;
-    public enum State {WALKING, INJURED_STANDING, INJURED_KICKED, DEAD}
+    public enum State {WALKING, INJURED, DEAD}
     public State currentState;
     public State previousState;
     private float stateTime;
@@ -40,12 +34,12 @@ public class Turtle extends Enemy {
         Array<TextureRegion> frames = new Array<>();
         for(int i = 0; i < 11; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("monster_crawl"),i * 90,0,90,59));
-        walkAnimation = new Animation<TextureRegion>(0.07f, frames);
+        walkAnimation = new Animation<TextureRegion>(0.1f, frames);
         frames.clear();
 
         currentState = previousState = State.WALKING;
 
-        // VVV === THIS IS THE SIZE OF THE SPRITE RENDERED ON THE PLAYSCREEN
+        // CODE BELOW SETS THE SIZE OF THE SPRITE RENDERED ON THE PLAYSCREEN
         setBounds(getX(),getY(),80 / LightSkull.PPM, 80 / LightSkull.PPM);
     }
 
@@ -54,7 +48,7 @@ public class Turtle extends Enemy {
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
+        body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
 
@@ -65,7 +59,7 @@ public class Turtle extends Enemy {
         fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.OBJECT_BIT | LightSkull.BRICK_BIT | LightSkull.COIN_BIT | LightSkull.PLAYER_BIT  | LightSkull.ENEMY_BIT | LightSkull.PROJECTILE_BIT;
 
         shape.setAsBox(30 / LightSkull.PPM, 28 / LightSkull.PPM);
-        b2body.createFixture(fdef).setUserData(this);
+        body.createFixture(fdef).setUserData(this);
 
         //Create the Head here:
 //        PolygonShape head = new PolygonShape();
@@ -79,7 +73,7 @@ public class Turtle extends Enemy {
 //        fdef.shape = head;
 //        fdef.restitution = 1.5f;
 //        fdef.filter.categoryBits = LightSkull.ENEMY_HEAD_BIT;
-//        b2body.createFixture(fdef).setUserData(this);
+//        body.createFixture(fdef).setUserData(this);
     }
 
     public void draw(Batch batch){
@@ -89,16 +83,16 @@ public class Turtle extends Enemy {
 
     public void onEnemyHit(Enemy enemy){
         if(enemy instanceof Turtle){
-            if(((Turtle) enemy).currentState == State.INJURED_KICKED && currentState != State.INJURED_KICKED){
-                killed();
+            if(((Turtle) enemy).currentState == State.INJURED && currentState != State.INJURED){
+                currentState = State.DEAD;
             }
-            else if(currentState == State.INJURED_KICKED)
+            else if(currentState == State.INJURED)
                 return;
             else
                 reverseVelocity(true,false);
 
         }
-        else if(currentState != State.INJURED_KICKED)
+        else if(currentState != State.INJURED)
             reverseVelocity(true,false);
     }
 
@@ -106,8 +100,7 @@ public class Turtle extends Enemy {
         TextureRegion region;
 
         switch (currentState) {
-            case INJURED_STANDING:
-            case  INJURED_KICKED:
+            case INJURED:
                 region = injured;
                 break;
             case WALKING:
@@ -134,52 +127,26 @@ public class Turtle extends Enemy {
     @Override
     public void update(float dt) {
         setRegion(getFrame(dt));
-        if(currentState == State.INJURED_STANDING && stateTime > 5){
+        if(currentState == State.INJURED && stateTime > 5){
             currentState = State.WALKING;
         }
-        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
 
         if(currentState == State.DEAD && stateTime > 0 && !destroyed){ // NUMBER ON THIS LINE CONTROLS HOW LONG TURTLE IS ON SCREEN FOR AFTER DIEING
-                world.destroyBody(b2body);
+                world.destroyBody(body);
                 destroyed = true;
         }
         else
-            b2body.setLinearVelocity(velocity);
+            body.setLinearVelocity(velocity);
     }
-
-//    @Override
-//    public void hitByLaser(Player player) {
-//        if(currentState != State.INJURED_STANDING) {
-//            currentState = State.INJURED_STANDING;
-//            velocity.x = 0;
-//        } else {
-//            kick(player.getX() <= this.getX() ? KICK_RIGHT_SPEED : KICK_LEFT_SPEED);
-//        }
-//    }
 
     @Override
     public void hitByLaser(Player player) {
-        killed();
+        currentState = State.DEAD;
         LightSkull.manager.get("audio/sounds/stomp.wav", Sound.class).play();
-    }
-
-    public void kick(int speed){
-        velocity.x = speed;
-        currentState = State.INJURED_KICKED;
     }
 
     public State getCurrentState(){
         return currentState;
-    }
-
-    public void killed(){
-        currentState = State.DEAD;
-        Filter filter = new Filter();
-        filter.maskBits = LightSkull.GROUND_BIT;
-
-        for(Fixture fixture : b2body.getFixtureList())
-            fixture.setFilterData(filter);
-        b2body.applyLinearImpulse(new Vector2(0, 5f),b2body.getWorldCenter(), true);
-
     }
 }

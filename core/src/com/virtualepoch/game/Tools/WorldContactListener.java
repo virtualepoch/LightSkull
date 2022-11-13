@@ -22,11 +22,11 @@ public class WorldContactListener implements ContactListener {
         switch (cDef) {
             case LightSkull.PLAYER_HEAD_BIT | LightSkull.BRICK_BIT:
             case LightSkull.PLAYER_HEAD_BIT | LightSkull.COIN_BIT:
-                if(fixA.getFilterData().categoryBits == LightSkull.PLAYER_HEAD_BIT)
-                    ((InteractiveTileObject)fixB.getUserData()).onHeadHit((Player) fixA.getUserData());
-                else
-                    ((InteractiveTileObject)fixA.getUserData()).onHeadHit((Player) fixB.getUserData());
-                break;
+//                if(fixA.getFilterData().categoryBits == LightSkull.PLAYER_HEAD_BIT)
+//                    ((InteractiveTileObject)fixB.getUserData()).onHeadHit((Player) fixA.getUserData());
+//                else
+//                    ((InteractiveTileObject)fixA.getUserData()).onHeadHit((Player) fixB.getUserData());
+//                break;
 
             case LightSkull.ENEMY_HEAD_BIT | LightSkull.PLAYER_BIT:
                 if(fixA.getFilterData().categoryBits == LightSkull.ENEMY_HEAD_BIT)

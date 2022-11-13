@@ -1,8 +1,5 @@
 package com.virtualepoch.game.Sprites.Projectiles;
 
-import static com.virtualepoch.game.Sprites.Projectiles.Projectile.State.IDLE;
-import static com.virtualepoch.game.Sprites.Projectiles.Projectile.State.MOVING_RIGHT_LEFT;
-
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -21,8 +18,8 @@ public class SmallLaser extends Projectile {
 
     public SmallLaser(PlayScreen screen, float x, float y) {
         super(screen, x, y);
-        currentState = State.IDLE;
-        previousState = State.IDLE;
+//        currentState = State.IDLE;
+//        previousState = State.IDLE;
 
         Array<TextureRegion> frames = new Array<>();
         for (int i = 0; i < 8; i++)
@@ -45,25 +42,25 @@ public class SmallLaser extends Projectile {
         CircleShape shape = new CircleShape();
         shape.setRadius(5 / LightSkull.PPM);
         fdef.filter.categoryBits = LightSkull.PROJECTILE_BIT;
-        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.OBJECT_BIT | LightSkull.BRICK_BIT | LightSkull.COIN_BIT | LightSkull.ENEMY_BIT | LightSkull.PROJECTILE_BIT | LightSkull.PLAYER_BIT;
+        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.ENEMY_BIT;
 
         fdef.shape = shape;
         body.createFixture(fdef).setUserData(this);
-//        setBounds(getX(), getY(), 60 / LightSkull.PPM, 10 / LightSkull.PPM);
+        setBounds(getX(), getY(), 60 / LightSkull.PPM, 10 / LightSkull.PPM);
     }
 
     public TextureRegion getFrame(float dt){
-        currentState = getState();
-
-        TextureRegion region;
-        switch(currentState){
-            case MOVING_RIGHT_LEFT:
-                region = (TextureRegion) animation.getKeyFrame(stateTime, true);
-                break;
-            default:
-                region = (TextureRegion) animation.getKeyFrame(stateTime, true);
-                break;
-        }
+//        currentState = getState();
+//
+//        TextureRegion region;
+//        switch(currentState){
+//            case MOVING_RIGHT_LEFT:
+              TextureRegion region = (TextureRegion) animation.getKeyFrame(stateTime, true);
+//                break;
+//            default:
+//                region = null;
+//                break;
+//        }
         if((body.getLinearVelocity().x < 0 || !movingRight) && !region.isFlipX()){
             region.flip(true, false);
             movingRight = false;
@@ -73,9 +70,9 @@ public class SmallLaser extends Projectile {
         }
         // if the current state is the same as the previous state increase the state timer.
         // otherwise the state has changed and we need to reset timer.
-        stateTime = currentState == previousState ? stateTime + dt : 0;
+//        stateTime = currentState == previousState ? stateTime + dt : 0;
         // update previous state
-        previousState = currentState;
+//        previousState = currentState;
         // return our final adjusted frame
         return region;
     }
@@ -83,13 +80,11 @@ public class SmallLaser extends Projectile {
     @Override
     public void hitEnemy(Enemy enemy) {
         enemy.hitByLaser(player);
-        resetVelocity();
         destroy();
     }
 
     @Override
     public void hitObject() {
-        resetVelocity();
         destroy();
     }
 
@@ -104,7 +99,7 @@ public class SmallLaser extends Projectile {
         }
         else if (!destroyed){
             body.setLinearVelocity(velocity);
-            velocity.y = body.getLinearVelocity().y;
+//            velocity.y = body.getLinearVelocity().y;
             // THIS IS WHERE YOU CAN CHANGE THE SPRITE IMAGE POSITION ON THE OBJECTS B2BODY //
             if(velocity.x < 0)
                 setPosition(body.getPosition().x - getWidth() / 5f, body.getPosition().y - getHeight() / 2);
