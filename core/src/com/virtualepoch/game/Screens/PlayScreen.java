@@ -25,6 +25,7 @@ import com.virtualepoch.game.Scenes.AnimatedBackdrop;
 import com.virtualepoch.game.Scenes.Controller;
 import com.virtualepoch.game.Scenes.Hud;
 import com.virtualepoch.game.Sprites.Enemies.Enemy;
+import com.virtualepoch.game.Sprites.Projectiles.Bullet;
 import com.virtualepoch.game.Sprites.Projectiles.Projectile;
 import com.virtualepoch.game.Sprites.Projectiles.ProjectileDef;
 import com.virtualepoch.game.Sprites.Projectiles.SmallLaser;
@@ -65,6 +66,8 @@ public class PlayScreen implements Screen {
     private LinkedBlockingQueue<ProjectileDef> projectilesToSpawn;
 
     private Array<SmallLaser> lasers;
+
+    private  Array<Bullet> bullets;
 
     public PlayScreen(LightSkull game) {
         atlas = new TextureAtlas(("lightskull_sprites.atlas"));
@@ -111,11 +114,15 @@ public class PlayScreen implements Screen {
         projectilesToSpawn = new LinkedBlockingQueue<ProjectileDef>();
 
         lasers = new Array<SmallLaser>();
+
+        bullets = new Array<Bullet>();
     }
 
     public void spawnProjectile(ProjectileDef idef){
         projectilesToSpawn.add(idef);
     }
+
+    public void spawnBullet(Bullet bullet) { bullets.add(bullet);}
 
     public void handleSpawningProjectiles(float dt){
         if(!projectilesToSpawn.isEmpty()){
@@ -183,7 +190,8 @@ public class PlayScreen implements Screen {
                 controller.bHasBeenPressed();
             }else{
 //                new SmallLaser(this,player.body.getPosition().x + 20 / PPM, player.body.getPosition().y + 25 / LightSkull.PPM);
-                spawnProjectile(new ProjectileDef(new Vector2(player.body.getPosition().x + 20/ PPM, player.body.getPosition().y + 25 / LightSkull.PPM), SmallLaser.class));
+                spawnBullet(new Bullet(this, player.body.getPosition().x + 20 / PPM, player.body.getPosition().y + 25 / PPM));
+//                spawnProjectile(new ProjectileDef(new Vector2(player.body.getPosition().x + 20/ PPM, player.body.getPosition().y + 25 / LightSkull.PPM), SmallLaser.class));
                 controller.bHasBeenPressed();
             }
         }
@@ -206,6 +214,9 @@ public class PlayScreen implements Screen {
 
         for(SmallLaser smallLaser : lasers)
             smallLaser.update(dt);
+
+        for(Bullet bullet : bullets)
+            bullet.update(dt);
 
         for(Projectile projectile : projectiles)
             projectile.update(dt);
@@ -249,6 +260,9 @@ public class PlayScreen implements Screen {
 
         for(Projectile projectile : projectiles)
             projectile.draw(game.batch);
+
+        for(Bullet bullet: bullets)
+            bullet.draw(game.batch);
 
         game.batch.end();
 
