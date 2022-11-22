@@ -25,15 +25,13 @@ import com.virtualepoch.game.Scenes.AnimatedBackdrop;
 import com.virtualepoch.game.Scenes.Controller;
 import com.virtualepoch.game.Scenes.Hud;
 import com.virtualepoch.game.Sprites.Enemies.Enemy;
-import com.virtualepoch.game.Sprites.Projectiles.Bullet;
-import com.virtualepoch.game.Sprites.Projectiles.Projectile;
-import com.virtualepoch.game.Sprites.Projectiles.ProjectileDef;
-import com.virtualepoch.game.Sprites.Projectiles.SmallLaser;
+import com.virtualepoch.game.Sprites.Bullet;
 import com.virtualepoch.game.Sprites.Player;
 import com.virtualepoch.game.Tools.B2WorldCreator;
 import com.virtualepoch.game.Tools.WorldContactListener;
 
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 public class PlayScreen implements Screen {
     private LightSkull game;
@@ -41,7 +39,7 @@ public class PlayScreen implements Screen {
     private TextureAtlas atlas;
 
     //basic playscreen variables
-    private OrthographicCamera gamecam;
+    private OrthographicCamera gameCam;
     public Viewport gamePort;
     private Hud hud;
     private Controller controller;
@@ -62,20 +60,15 @@ public class PlayScreen implements Screen {
 
     private Music music;
 
-    private Array<Projectile> projectiles;
-    private LinkedBlockingQueue<ProjectileDef> projectilesToSpawn;
-
-    private Array<SmallLaser> lasers;
-
-    private  Array<Bullet> bullets;
+    private Array<Bullet> bullets;
 
     public PlayScreen(LightSkull game) {
         atlas = new TextureAtlas(("lightskull_sprites.atlas"));
         this.game = game;
-        gamecam = new OrthographicCamera();
+        gameCam = new OrthographicCamera();
 
         //Create a FitViewport to maintain virtual aspect ratio despite screen size.
-        gamePort = new FitViewport(V_WIDTH / PPM, V_HEIGHT / PPM, gamecam);
+        gamePort = new FitViewport(V_WIDTH / PPM, V_HEIGHT / PPM, gameCam);
 
         //Create our game HUD for scores/timers/level info
         hud = new Hud(game.batch);
@@ -88,8 +81,8 @@ public class PlayScreen implements Screen {
         map = mapLoader.load("level1_1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / LightSkull.PPM);
 
-        //Initially set our gamecam to be centered correctly at the start of the
-        gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
+        //Initially set our gameCam to be centered correctly at the start of the
+        gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
         //create our Box2D world, setting no gravity in X, -10 gravity in Y, and allow
         world = new World(new Vector2(0, -10), true);
@@ -110,37 +103,14 @@ public class PlayScreen implements Screen {
         music.setVolume(0.4f);
         music.play();
 
-        projectiles = new Array<Projectile>();
-        projectilesToSpawn = new LinkedBlockingQueue<ProjectileDef>();
-
-        lasers = new Array<SmallLaser>();
-
         bullets = new Array<Bullet>();
     }
 
-    public void spawnProjectile(ProjectileDef idef){
-        projectilesToSpawn.add(idef);
+    public void handleBulletDir(){
+        for(Bullet bullet : bullets)
+            if (player.isFlipX() && !bullet.moving() && !controller.bHasBeenPressed())
+                bullet.reverseVelocity();
     }
-
-    public void spawnBullet(Bullet bullet) { bullets.add(bullet);}
-
-    public void handleSpawningProjectiles(float dt){
-        if(!projectilesToSpawn.isEmpty()){
-            ProjectileDef idef = projectilesToSpawn.poll();
-            if(idef.type == SmallLaser.class){
-                projectiles.add(new SmallLaser(this, idef.position.x, idef.position.y));
-            }
-            for(Projectile projectile : projectiles){
-                // !!REMOVED THE FOLLOWING FROM BELOW AFTER 'player.isFlipX()' !! -- && !controller.bHasBeenPressed()
-                if(player.isFlipX() && !projectile.moving() && !controller.bHasBeenPressed()){
-                    projectile.reverseVelocity();
-                }
-                projectile.update(dt);
-            }
-        }
-    }
-
-
 
     public TextureAtlas getAtlas(){
         return atlas;
@@ -151,10 +121,6 @@ public class PlayScreen implements Screen {
     }
 
     public void handleInput(){
-        //if our user is holding down mouse move our camera through the game world.
-//        if(Gdx.input.isTouched())
-//            gamecam.position.x += 100 * dt;
-
         if(player.currentState != Player.State.DEAD)
         // INPUT FOR MOVING RIGHT
         if((Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT) || controller.isRightPressed()) && player.body.getLinearVelocity().x <= 2)
@@ -185,22 +151,18 @@ public class PlayScreen implements Screen {
         // !!DELETED THE FOLLOWING FROM CONDITIONAL BELOW.. APPARENTLY NOT NEEDED!!  && (player.getState() == Player.State.STANDING || player.getState() == Player.State.MOVING_RIGHT_LEFT || player.getState() == Player.State.JUMPING)
         if(Gdx.input.isKeyJustPressed(Input.Keys.P) || controller.isBPressed()) {
             if(player.isFlipX()){
-//                new SmallLaser(this,player.body.getPosition().x - 20 / PPM, player.body.getPosition().y + 25 / LightSkull.PPM);
-                spawnProjectile(new ProjectileDef(new Vector2(player.body.getPosition().x - 20 / PPM, player.body.getPosition().y + 25 / LightSkull.PPM), SmallLaser.class));
-                controller.bHasBeenPressed();
+                bullets.add(new Bullet(this, player.body.getPosition().x - 20 / PPM, player.body.getPosition().y + 25 / PPM));
             }else{
-//                new SmallLaser(this,player.body.getPosition().x + 20 / PPM, player.body.getPosition().y + 25 / LightSkull.PPM);
-                spawnBullet(new Bullet(this, player.body.getPosition().x + 20 / PPM, player.body.getPosition().y + 25 / PPM));
-//                spawnProjectile(new ProjectileDef(new Vector2(player.body.getPosition().x + 20/ PPM, player.body.getPosition().y + 25 / LightSkull.PPM), SmallLaser.class));
-                controller.bHasBeenPressed();
+                bullets.add(new Bullet(this, player.body.getPosition().x + 20 / PPM, player.body.getPosition().y + 25 / PPM));
             }
+            controller.bHasBeenPressed();
+            handleBulletDir();
         }
     }
 
     public void update(float dt){
         //handle user input first
         handleInput();
-        handleSpawningProjectiles(dt);
 
         world.step(1/60f, 6, 2);
 
@@ -208,28 +170,23 @@ public class PlayScreen implements Screen {
 
         for(Enemy enemy : creator.getEnemies()) {
             enemy.update(dt);
-            if(enemy.getX() < player.getX() + 230 / PPM) //adjust this to change when enemies are activated
+            if(enemy.getX() < player.getX() + 280 / PPM) //adjust this to change when enemies are activated
                 enemy.body.setActive(true);
         }
-
-        for(SmallLaser smallLaser : lasers)
-            smallLaser.update(dt);
 
         for(Bullet bullet : bullets)
             bullet.update(dt);
 
-        for(Projectile projectile : projectiles)
-            projectile.update(dt);
-
         hud.update(dt);
 
-        if(player.currentState != Player.State.DEAD) {
-            gamecam.position.x = player.body.getPosition().x;
-        }
-        //update our gamecam with correct coordinates after changes
-        gamecam.update();
+        //have the gameCam move along as our player moves
+        if(player.currentState != Player.State.DEAD)
+            gameCam.position.x = player.body.getPosition().x;
+
+        //update our gameCam with correct coordinates after changes
+        gameCam.update();
         //tell our renderer to draw only what our camera can see in our game
-        renderer.setView(gamecam);
+        renderer.setView(gameCam);
     }
 
     @Override
@@ -248,18 +205,15 @@ public class PlayScreen implements Screen {
         renderer.render();
 
         //render our Box2DDebugLines
-        b2dr.render(world, gamecam.combined);
+        b2dr.render(world, gameCam.combined);
 
-        game.batch.setProjectionMatrix(gamecam.combined);
+        game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
 
         for(Enemy enemy : creator.getEnemies())
             enemy.draw(game.batch);
 
         player.draw(game.batch);
-
-        for(Projectile projectile : projectiles)
-            projectile.draw(game.batch);
 
         for(Bullet bullet: bullets)
             bullet.draw(game.batch);
@@ -278,7 +232,7 @@ public class PlayScreen implements Screen {
     }
 
     public boolean gameOver(){
-        return player.currentState == Player.State.DEAD && player.getStateTime() > 3;
+        return player.currentState == Player.State.DEAD && player.getStateTime() > 2;
     }
 
     @Override
@@ -311,6 +265,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
+        backdrop.dispose();
         map.dispose();
         renderer.dispose();
         world.dispose();

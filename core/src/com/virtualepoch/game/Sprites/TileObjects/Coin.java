@@ -1,4 +1,4 @@
-package com.virtualepoch.game.Sprites;
+package com.virtualepoch.game.Sprites.TileObjects;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.maps.MapObject;
@@ -7,8 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.virtualepoch.game.LightSkull;
 import com.virtualepoch.game.Scenes.Hud;
 import com.virtualepoch.game.Screens.PlayScreen;
-import com.virtualepoch.game.Sprites.Projectiles.ProjectileDef;
-import com.virtualepoch.game.Sprites.Projectiles.SmallLaser;
 import com.virtualepoch.game.Sprites.TileObjects.InteractiveTileObject;
 
 public class Coin extends InteractiveTileObject {

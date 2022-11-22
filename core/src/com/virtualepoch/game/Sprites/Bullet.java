@@ -1,5 +1,6 @@
-package com.virtualepoch.game.Sprites.Projectiles;
+package com.virtualepoch.game.Sprites;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,8 +14,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.virtualepoch.game.LightSkull;
 import com.virtualepoch.game.Screens.PlayScreen;
-import com.virtualepoch.game.Sprites.Enemies.Enemy;
-import com.virtualepoch.game.Sprites.Player;
 
 public class Bullet extends Sprite {
     protected PlayScreen screen;
@@ -24,53 +23,50 @@ public class Bullet extends Sprite {
 
     protected Vector2 velocity;
 
-//    public enum State { MOVING_RIGHT_LEFT, IDLE }
-//    public State currentState;
-//    public State previousState;
-
     protected boolean toDestroy;
     protected boolean destroyed;
     protected boolean movingRight;
 
     private float stateTime;
-    private Animation<TextureRegion> animation;
+    private static Animation<TextureRegion> animation;
 
     public Bullet(PlayScreen screen, float x, float y){
         this.screen = screen;
         this.world = screen.getWorld();
+
+        setPosition(x,y);
 
         Array<TextureRegion> frames = new Array<>();
         for (int i = 0; i < 8; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("fireball"), i * 41, 0, 41, 32));
         animation = new Animation(0.05f, frames);
         frames.clear();
+        // POSITION AND WIDTH AND HEIGHT OF SPRITE ON SCREEN
+        setBounds(getX(), getY(), 40 / LightSkull.PPM, 8 / LightSkull.PPM);
 
         stateTime = 0;
         velocity = new Vector2(5f, 0);
 
-        setPosition(x,y);
-//        setBounds(getX(),getY(),40/ LightSkull.PPM,8/ LightSkull.PPM);
-        defineProjectile();
         toDestroy = false;
         destroyed = false;
         movingRight = true;
+
+        defineBullet();
     }
+    public void defineBullet(){
+        BodyDef bDef = new BodyDef();
+        bDef.position.set(getX(), getY());
+        bDef.type = BodyDef.BodyType.DynamicBody;
+        body = world.createBody(bDef);
 
-    public void defineProjectile() {
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(getX(), getY());
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        body = world.createBody(bdef);
-
-        FixtureDef fdef = new FixtureDef();
+        FixtureDef fDef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(5 / LightSkull.PPM);
-        fdef.filter.categoryBits = LightSkull.PROJECTILE_BIT;
-        fdef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.ENEMY_BIT;
+        fDef.filter.categoryBits = LightSkull.PROJECTILE_BIT;
+        fDef.filter.maskBits = LightSkull.GROUND_BIT | LightSkull.ENEMY_BIT;
 
-        fdef.shape = shape;
-        body.createFixture(fdef).setUserData(this);
-        setBounds(getX(), getY(), 40 / LightSkull.PPM, 8 / LightSkull.PPM);
+        fDef.shape = shape;
+        body.createFixture(fDef).setUserData(this);
     }
 
     public TextureRegion getFrame(float dt){
@@ -86,18 +82,13 @@ public class Bullet extends Sprite {
         return region;
     }
 
+    public boolean isOutOfScreen() {
+        return body.getPosition().x > LightSkull.V_WIDTH / 4;
+    }
+
 
     public boolean moving(){
         return body.getLinearVelocity().x != 0;
-    }
-
-    public void hitEnemy(Enemy enemy) {
-        enemy.hitByLaser(player);
-        destroy();
-    }
-
-    public void hitObject() {
-        destroy();
     }
 
     public void draw(Batch batch){
@@ -106,7 +97,6 @@ public class Bullet extends Sprite {
     }
 
     public void destroy(){
-        resetVelocity();
         toDestroy = true;
     }
 
@@ -114,27 +104,24 @@ public class Bullet extends Sprite {
         velocity.x = -velocity.x;
     }
 
-    public void resetVelocity(){
-        movingRight = true;
-    }
-
     public void update(float dt) {
         stateTime +=dt;
-        if(toDestroy && !destroyed){
-            world.destroyBody(body);
+        if(toDestroy && !destroyed || isOutOfScreen() && !destroyed){
             destroyed = true;
             stateTime = 0;
+            world.destroyBody(body);
         }
         else if (!destroyed){
             body.setLinearVelocity(velocity);
-//            velocity.y = body.getLinearVelocity().y;
+            velocity.y = body.getLinearVelocity().y;
+
+            setRegion(getFrame(dt));
+
             // THIS IS WHERE YOU CAN CHANGE THE SPRITE IMAGE POSITION ON THE OBJECTS B2BODY //
             if(velocity.x < 0)
                 setPosition(body.getPosition().x - getWidth() / 5f, body.getPosition().y - getHeight() / 2);
             else
                 setPosition(body.getPosition().x - getWidth() / 1.3f, body.getPosition().y - getHeight() / 2);
-            setRegion(getFrame(dt));
         }
     }
 }
-

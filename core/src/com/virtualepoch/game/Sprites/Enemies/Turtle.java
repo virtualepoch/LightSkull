@@ -141,7 +141,7 @@ public class Turtle extends Enemy {
     }
 
     @Override
-    public void hitByLaser(Player player) {
+    public void destroy() {
         currentState = State.DEAD;
         LightSkull.manager.get("audio/sounds/stomp.wav", Sound.class).play();
     }

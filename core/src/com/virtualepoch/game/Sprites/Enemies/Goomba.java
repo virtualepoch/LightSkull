@@ -94,7 +94,7 @@ public class Goomba extends Enemy {
     }
 
     @Override
-    public void hitByLaser(Player player) {
+    public void destroy() {
         setToDestroy = true;
         LightSkull.manager.get("audio/sounds/stomp.wav", Sound.class).play();
     }
