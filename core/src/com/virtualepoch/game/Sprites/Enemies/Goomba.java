@@ -26,27 +26,14 @@ public class Goomba extends Enemy {
         Array<TextureRegion> frames = new Array<>();
         for(int i = 0; i < 11; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("skull_fly" ), i * 40, 0, 40, 40));
-        walkAnimation = new Animation(0.2f, frames);
+        walkAnimation = new Animation<>(0.2f, frames);
         frames.clear();
+
         stateTime = 0;
+
         setBounds(getX(), getY(), 60 / LightSkull.PPM, 60 / LightSkull.PPM);
         setToDestroy = false;
         destroyed = false;
-    }
-
-    public void update(float dt){
-        stateTime +=dt;
-        if(setToDestroy && !destroyed){
-            world.destroyBody(body);
-            destroyed = true;
-            setRegion(new TextureRegion(screen.getAtlas().findRegion("spider_dead" ), 0, 0, 17, 13));
-            stateTime = 0;
-        }
-        else if(!destroyed) {
-            body.setLinearVelocity(velocity);
-            setPosition(body.getPosition().x - getWidth() / 2 + 4 / LightSkull.PPM, body.getPosition().y - getHeight() / 2 + 3 / LightSkull.PPM);
-            setRegion(walkAnimation.getKeyFrame(stateTime,true));
-        }
     }
 
     @Override
@@ -78,6 +65,21 @@ public class Goomba extends Enemy {
         fdef.restitution = 0.5f;
         fdef.filter.categoryBits = LightSkull.ENEMY_HEAD_BIT;
         body.createFixture(fdef).setUserData(this);
+    }
+
+    public void update(float dt){
+        stateTime +=dt;
+        if(setToDestroy && !destroyed){
+            world.destroyBody(body);
+            destroyed = true;
+            setRegion(new TextureRegion(screen.getAtlas().findRegion("spider_dead" ), 0, 0, 17, 13));
+            stateTime = 0;
+        }
+        else if(!destroyed) {
+            body.setLinearVelocity(velocity);
+            setPosition(body.getPosition().x - getWidth() / 2 + 4 / LightSkull.PPM, body.getPosition().y - getHeight() / 2 + 3 / LightSkull.PPM);
+            setRegion(walkAnimation.getKeyFrame(stateTime,true));
+        }
     }
 
     public void draw(Batch batch){

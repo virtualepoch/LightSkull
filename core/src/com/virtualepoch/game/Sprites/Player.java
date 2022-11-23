@@ -68,49 +68,49 @@ public class Player extends Sprite {
         Array<TextureRegion> frames = new Array<>();
         for(int i = 0; i < 2; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_stand"), i * 45, 0, 45, 56));
-        playerStand = new Animation(0.8f, frames);
+        playerStand = new Animation<>(0.8f, frames);
         frames.clear();
         for(int i = 0; i < 5; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightSkullRunWidth, 0, lightSkullRunWidth, lightSkullRunHeight));
-        playerMoveRightLeft = new Animation(0.1f, frames);
+        playerMoveRightLeft = new Animation<>(0.1f, frames);
         frames.clear();
         for(int i = 0; i < 5; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightSkullRunWidth, 0, lightSkullRunWidth, lightSkullRunHeight));
-        playerMoveUp = new Animation(0.1f, frames);
+        playerMoveUp = new Animation<>(0.1f, frames);
         frames.clear();
         for(int i = 0; i < 5; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightSkullRunWidth, 0, lightSkullRunWidth, lightSkullRunHeight));
-        playerMoveDown = new Animation(0.1f, frames);
+        playerMoveDown = new Animation<>(0.1f, frames);
         frames.clear();
         for(int i = 0; i < 5; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightSkullRunWidth, 0, lightSkullRunWidth, lightSkullRunHeight));
-        playerJump = new Animation(0.1f, frames);
+        playerJump = new Animation<>(0.1f, frames);
         frames.clear();
         for(int i = 0; i < 2; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_stand"), i * 45, 0, 45, 56));
-        playerDead = new Animation(0.4f, frames);
+        playerDead = new Animation<>(0.4f, frames);
         frames.clear();
 
         frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), 0, 0, lightSkullRunWidth, lightSkullRunHeight));
         frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), 0, 0, lightSkullRunWidth, lightSkullRunHeight));
         frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), 0, 0, lightSkullRunWidth, lightSkullRunHeight));
         frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), 0, 0, lightSkullRunWidth, lightSkullRunHeight));
-        growPlayer = new Animation(0.2f, frames);
+        growPlayer = new Animation<>(0.2f, frames);
         frames.clear();
 
         ///////////////////////// VVV === BIG OR ALTERED PLAYER SPRITE SHEETS
         for(int i = 0; i < 2; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_stand"), i * 45, 0, 45, 56));
-        bigPlayerStand = new Animation(0.8f, frames);
+        bigPlayerStand = new Animation<>(0.8f, frames);
         frames.clear();
 
         for(int i = 0; i < 5; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"),i * lightSkullRunWidth, 0, lightSkullRunWidth, lightSkullRunHeight));
-        bigPlayerRun = new Animation(0.1f, frames);
+        bigPlayerRun = new Animation<>(0.1f, frames);
         frames.clear();
         for(int i = 0; i < 5; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("lightskull_run"), i * lightSkullRunWidth, 0, lightSkullRunWidth, lightSkullRunHeight));
-        bigPlayerJump = new Animation(0.1f, frames);
+        bigPlayerJump = new Animation<>(0.1f, frames);
         frames.clear();
 
         // Define Player in box2d

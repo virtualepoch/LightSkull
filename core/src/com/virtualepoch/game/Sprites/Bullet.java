@@ -39,7 +39,7 @@ public class Bullet extends Sprite {
         Array<TextureRegion> frames = new Array<>();
         for (int i = 0; i < 8; i++)
             frames.add(new TextureRegion(screen.getAtlas().findRegion("fireball"), i * 41, 0, 41, 32));
-        animation = new Animation(0.05f, frames);
+        animation = new Animation<>(0.05f, frames);
         frames.clear();
         // POSITION AND WIDTH AND HEIGHT OF SPRITE ON SCREEN
         setBounds(getX(), getY(), 40 / LightSkull.PPM, 8 / LightSkull.PPM);
@@ -82,9 +82,9 @@ public class Bullet extends Sprite {
         return region;
     }
 
-    public boolean isOutOfScreen() {
-        return body.getPosition().x > LightSkull.V_WIDTH / 4;
-    }
+//    public boolean isOutOfScreen() {
+//        return body.getPosition().x > player.getX() + 400 / LightSkull.PPM;
+//    }
 
 
     public boolean moving(){
@@ -100,16 +100,24 @@ public class Bullet extends Sprite {
         toDestroy = true;
     }
 
+    public boolean destroyed() {
+      if(destroyed) {
+          return true;
+      }
+        return false;
+    }
+
     public void reverseVelocity(){
         velocity.x = -velocity.x;
     }
 
     public void update(float dt) {
         stateTime +=dt;
-        if(toDestroy && !destroyed || isOutOfScreen() && !destroyed){
+        if(toDestroy && !destroyed){
+            world.destroyBody(body);
+            body = null;
             destroyed = true;
             stateTime = 0;
-            world.destroyBody(body);
         }
         else if (!destroyed){
             body.setLinearVelocity(velocity);

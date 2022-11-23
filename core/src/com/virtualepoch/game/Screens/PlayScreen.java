@@ -60,7 +60,7 @@ public class PlayScreen implements Screen {
 
     private Music music;
 
-    private Array<Bullet> bullets;
+    private ArrayList<Bullet> bullets;
 
     public PlayScreen(LightSkull game) {
         atlas = new TextureAtlas(("lightskull_sprites.atlas"));
@@ -103,13 +103,14 @@ public class PlayScreen implements Screen {
         music.setVolume(0.4f);
         music.play();
 
-        bullets = new Array<Bullet>();
+        bullets = new ArrayList<Bullet>();
     }
 
     public void handleBulletDir(){
         for(Bullet bullet : bullets)
-            if (player.isFlipX() && !bullet.moving() && !controller.bHasBeenPressed())
+            if (player.isFlipX() && !bullet.moving() && !controller.bHasBeenPressed()) {
                 bullet.reverseVelocity();
+            }
     }
 
     public TextureAtlas getAtlas(){
@@ -151,9 +152,9 @@ public class PlayScreen implements Screen {
         // !!DELETED THE FOLLOWING FROM CONDITIONAL BELOW.. APPARENTLY NOT NEEDED!!  && (player.getState() == Player.State.STANDING || player.getState() == Player.State.MOVING_RIGHT_LEFT || player.getState() == Player.State.JUMPING)
         if(Gdx.input.isKeyJustPressed(Input.Keys.P) || controller.isBPressed()) {
             if(player.isFlipX()){
-                bullets.add(new Bullet(this, player.body.getPosition().x - 20 / PPM, player.body.getPosition().y + 25 / PPM));
+                bullets.add(new Bullet(this, player.body.getPosition().x - 25 / PPM, player.body.getPosition().y + 25 / PPM));
             }else{
-                bullets.add(new Bullet(this, player.body.getPosition().x + 20 / PPM, player.body.getPosition().y + 25 / PPM));
+                bullets.add(new Bullet(this, player.body.getPosition().x + 25 / PPM, player.body.getPosition().y + 25 / PPM));
             }
             controller.bHasBeenPressed();
             handleBulletDir();
@@ -162,9 +163,10 @@ public class PlayScreen implements Screen {
 
     public void update(float dt){
         //handle user input first
-        handleInput();
+
 
         world.step(1/60f, 6, 2);
+        handleInput();
 
         player.update(dt);
 
@@ -174,8 +176,7 @@ public class PlayScreen implements Screen {
                 enemy.body.setActive(true);
         }
 
-        for(Bullet bullet : bullets)
-            bullet.update(dt);
+        for(Bullet bullet : bullets) bullet.update(dt);
 
         hud.update(dt);
 
@@ -190,9 +191,9 @@ public class PlayScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float dt) {
         //separate our update logic from render
-        update(delta);
+        update(dt);
 
         //Clear the game screen with Black
         Gdx.gl.glClearColor(0,0,0,1);
